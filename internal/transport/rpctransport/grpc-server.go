@@ -5,7 +5,6 @@ import (
 	"auth-micro-service/internal/transport/rpctransport/auth/logout"
 	"auth-micro-service/internal/transport/rpctransport/auth/refresh_handler"
 	"auth-micro-service/internal/transport/rpctransport/auth/register"
-	create_description "auth-micro-service/internal/transport/rpctransport/user/create-description"
 	delet "auth-micro-service/internal/transport/rpctransport/user/delete"
 	"auth-micro-service/internal/transport/rpctransport/user/get"
 	"auth-micro-service/internal/transport/rpctransport/user/list"
@@ -18,11 +17,10 @@ type (
 	GetRefreshHandler  = refresh_handler.Handler
 	GetRegisterHandler = register_handler.Handler
 
-	GetUserDescriptionHandler = create_description.Handler
-	GetUserDeleteHandler      = delet.Handler
-	GetUserHandler            = get.Handler
-	GetListUserHandler        = list.Handler
-	GetUpdateUserHandler      = update.Handler
+	GetUserDeleteHandler = delet.Handler
+	GetUserHandler       = get.Handler
+	GetListUserHandler   = list.Handler
+	GetUpdateUserHandler = update.Handler
 )
 
 type AuthHandlers struct {
@@ -47,7 +45,6 @@ func NewAuthHandlers(
 }
 
 type UsersHandlers struct {
-	*GetUserDescriptionHandler
 	*GetUserDeleteHandler
 	*GetUserHandler
 	*GetListUserHandler
@@ -55,17 +52,15 @@ type UsersHandlers struct {
 }
 
 func NewUsersHandlers(
-	userDescription *GetUserDescriptionHandler,
 	getUserDeleteHandler *GetUserDeleteHandler,
 	getUserHandler *GetUserHandler,
 	getListUserHandler *GetListUserHandler,
 	getUpdateUserHandler *GetUpdateUserHandler,
 ) *UsersHandlers {
 	return &UsersHandlers{
-		GetUserDescriptionHandler: userDescription,
-		GetUserDeleteHandler:      getUserDeleteHandler,
-		GetUserHandler:            getUserHandler,
-		GetListUserHandler:        getListUserHandler,
-		GetUpdateUserHandler:      getUpdateUserHandler,
+		GetUserDeleteHandler: getUserDeleteHandler,
+		GetUserHandler:       getUserHandler,
+		GetListUserHandler:   getListUserHandler,
+		GetUpdateUserHandler: getUpdateUserHandler,
 	}
 }

@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 )
@@ -14,6 +15,14 @@ func (s *Storage) Logout(ctx context.Context, id uuid.UUID) error {
 		  AND revoked_at IS NULL
 	`
 
-	_, err := s.conn.Exec(ctx, query, id)
-	return err
+	tag, err := s.conn.Exec(ctx, query, id)
+	if err != nil {
+		return fmt.Errorf("Logout: %w", err)
+	}
+
+	if tag.RowsAffected() == 0 {
+		return fmt.Errorf("Logout: session not found")
+	}
+
+	return nil
 }

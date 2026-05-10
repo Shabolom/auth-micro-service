@@ -70,7 +70,7 @@ func (d *DI) loggingInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor 
 
 		session, ok := d.GetInMemoryStorage().Get(claims.ID)
 		if !ok || session.Revoked {
-			logger.Info("session is invalid", zap.String("id", claims.ID))
+			logger.Info("session is invalid InMemory", zap.String("id", claims.ID))
 			return nil, status.Error(codes.Unauthenticated, errors.New("user is not authorized").Error())
 		}
 

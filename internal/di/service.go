@@ -10,5 +10,5 @@ func (d *DI) GetAuthService() *auth.Service {
 }
 
 func (d *DI) GetUserService() *user.Service {
-	return user.New(d.GetUserRepo(), d.Config().Secret, d.Logger())
+	return user.New(d.GetAuthRepo(), d.GetUserRepo(), d.GetInMemoryStorage(), d.Config().Secret, d.Logger())
 }

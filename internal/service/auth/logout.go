@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (s *Service) Logout(ctx context.Context, tokens *dto.Tokens) error {
+func (s *Service) Logout(ctx context.Context, userAgent string, tokens *dto.Tokens) error {
 	refreshTokenClaims, err := utils.ParseToken(tokens.RefreshToken, s.secret, s.logger)
 	if err != nil {
 		s.logger.Info(err.Error())
@@ -30,6 +30,18 @@ func (s *Service) Logout(ctx context.Context, tokens *dto.Tokens) error {
 	refreshTokenID, err := uuid.Parse(refreshTokenClaims.ID)
 	if err != nil {
 		s.logger.Info("Couldn't parse refresh token id")
+		return err
+	}
+
+	refreshTokenHash, err := s.authRepo.GetActiveRefreshToken(ctx, refreshTokenClaims.ID, refreshTokenClaims.UserID, userAgent)
+	if err != nil {
+		s.logger.Warn("Couldn't get active refresh token")
+		return err
+	}
+
+	err = utils.Compare(refreshTokenHash, tokens.RefreshToken)
+	if err != nil {
+		s.logger.Warn("Couldn't compare refresh token")
 		return err
 	}
 

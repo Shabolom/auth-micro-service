@@ -1,1 +1,5 @@
+DROP TABLE IF EXISTS users;
+
+DROP INDEX IF EXISTS ux_accounts_email;
+
 DROP TABLE IF EXISTS accounts;

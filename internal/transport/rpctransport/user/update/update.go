@@ -37,28 +37,16 @@ func (h *Handler) UpdateUsers(ctx context.Context, req *authv1.UpdateUsersReques
 	}
 
 	user := &authv1.User{
-		Id:   userAndAccount.ID,
-		Mail: userAndAccount.Email,
-	}
-
-	if user.CreatedAt != nil {
-		user.CreatedAt = timestamppb.New(*userAndAccount.CreatedAt)
-	}
-
-	if user.AddedAt != nil {
-		user.AddedAt = timestamppb.New(*userAndAccount.UpdatedAt)
-	}
-
-	if userAndAccount.Name != nil {
-		user.Name = *userAndAccount.Name
-	}
-
-	if userAndAccount.Age != nil {
-		user.Age = uint32(*userAndAccount.Age)
+		Id:        userAndAccount.ID,
+		Mail:      userAndAccount.Email,
+		Name:      userAndAccount.Name,
+		Age:       uint32(userAndAccount.Age),
+		CreatedAt: timestamppb.New(userAndAccount.CreatedAt),
+		AddedAt:   timestamppb.New(userAndAccount.UpdatedAt),
 	}
 
 	return &authv1.UpdateUsersReply{
-		ErrInfoReason: 0,
+		ErrInfoReason: authv1.UpdateUsersReply_STATUS_OK,
 		User:          user,
 		Message:       "success",
 	}, nil

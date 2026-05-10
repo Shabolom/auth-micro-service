@@ -1,7 +1,11 @@
 package auth
 
 import (
+	"auth-micro-service/pkg/shortcut"
 	"context"
+	"errors"
+
+	"github.com/jackc/pgx/v5"
 )
 
 func (s *Storage) GetActiveRefreshToken(ctx context.Context, jti string, userID string, userAgent string) (string, error) {
@@ -28,6 +32,9 @@ func (s *Storage) GetActiveRefreshToken(ctx context.Context, jti string, userID 
 		&refreshTokenHash,
 	)
 	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return "", shortcut.ErrNoRows
+		}
 		return "", err
 	}
 

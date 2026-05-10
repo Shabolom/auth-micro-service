@@ -8,11 +8,11 @@ import (
 	"go.uber.org/zap"
 )
 
-func (s *Service) GetAccounts(ctx context.Context) ([]dto.AccountAndUser, error) {
-	accounts, err := s.userRepo.GetAccounts(ctx)
+func (s *Service) GetUsers(ctx context.Context) ([]*dto.AccountAndUser, error) {
+	accounts, err := s.userRepo.GetUsers(ctx)
 	if err != nil {
-		s.logger.Info("GetAccounts error", zap.Error(err))
-		return nil, fmt.Errorf("GetAccounts: %w", err)
+		s.logger.Info("GetUsers error", zap.Error(err))
+		return nil, fmt.Errorf("GetUsers: %w", err)
 	}
 
 	return accounts, nil

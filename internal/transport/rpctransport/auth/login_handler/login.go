@@ -10,7 +10,6 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/peer"
 )
 
 type LoginService interface {
@@ -29,21 +28,7 @@ func New(loginService LoginService) *Handler {
 }
 
 func (h *Handler) Login(ctx context.Context, req *authv1.LoginRequest) (*authv1.LoginReply, error) {
-	ip := ""
-	userAgent := ""
-
-	md, ok := metadata.FromIncomingContext(ctx)
-	if ok {
-		agents := md.Get("user-agent")
-		if len(agents) > 0 {
-			userAgent = agents[0]
-		}
-	}
-
-	p, ok := peer.FromContext(ctx)
-	if ok {
-		ip = p.Addr.String()
-	}
+	ip, userAgent := utils.IpUserAgentFromMetadata(ctx)
 
 	oldAccessToken, _ := utils.AccessTokenFromMetadata(ctx)
 	oldRefreshToken, _ := utils.RefreshTokenFromMetadata(ctx)
@@ -70,7 +55,8 @@ func (h *Handler) Login(ctx context.Context, req *authv1.LoginRequest) (*authv1.
 		}
 
 		return &authv1.LoginReply{
-			Message: "success",
+			ErrInfoReason: authv1.LoginReply_STATUS_OK,
+			Message:       "success",
 		}, nil
 	}
 
@@ -97,6 +83,7 @@ func (h *Handler) Login(ctx context.Context, req *authv1.LoginRequest) (*authv1.
 	}
 
 	return &authv1.LoginReply{
-		Message: "success",
+		ErrInfoReason: authv1.LoginReply_STATUS_OK,
+		Message:       "success",
 	}, nil
 }

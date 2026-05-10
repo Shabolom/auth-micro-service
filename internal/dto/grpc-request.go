@@ -5,6 +5,8 @@ type RegisterRequest struct {
 	Password  string
 	IP        string
 	UserAgent string
+	Name      string
+	Age       int
 }
 
 type LoginRequest struct {

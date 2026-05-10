@@ -14,13 +14,14 @@ import (
 
 const refreshTokenTTL = 72 * time.Hour
 
-func (s *Service) Register(ctx context.Context, request dto.RegisterRequest) (dto.Tokens, error) {
-	if request.Email == "" || request.Password == "" {
-		s.logger.Warn("register email or password is empty")
-		return dto.Tokens{}, errors.New("email or password is empty")
-	}
+var now = time.Now()
 
-	now := time.Now()
+func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (dto.Tokens, error) {
+	err := requestValidate(request)
+	if err != nil {
+		s.logger.Info("validation error", zap.Error(err))
+		return dto.Tokens{}, err
+	}
 
 	hashPassword, err := utils.Hash(request.Password)
 	if err != nil {
@@ -34,6 +35,8 @@ func (s *Service) Register(ctx context.Context, request dto.RegisterRequest) (dt
 		ID:           userID.String(),
 		Email:        request.Email,
 		PasswordHash: hashPassword,
+		Name:         request.Name,
+		Age:          request.Age,
 		CreatedAt:    now,
 		UpdatedAt:    now,
 	}
@@ -91,4 +94,16 @@ func (s *Service) Register(ctx context.Context, request dto.RegisterRequest) (dt
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}, nil
+}
+
+func requestValidate(req *dto.RegisterRequest) error {
+
+	if req.Email == "" || req.Password == "" {
+		return shortcut.ErrEmptyCredentials
+	}
+	if req.Name == "" || req.Age <= 0 {
+		return shortcut.ErrEmptyFields
+	}
+
+	return nil
 }

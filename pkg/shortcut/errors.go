@@ -11,4 +11,8 @@ var (
 	ErrInvalidToken                 = errors.New("invalid token")
 	ErrRevokedSession               = errors.New("session revoked")
 	ErrUserDescriptionAlreadyExists = errors.New("user description already exists")
+	ErrEmptyFields                  = errors.New("empty field is not allowed")
+	ErrAgeLimit                     = errors.New("age is too young")
+	ErrEmptyCredentials             = errors.New("credentials is empty")
+	ErrNoRows                       = errors.New("the record was not found")
 )

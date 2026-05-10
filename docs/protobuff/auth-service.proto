@@ -17,6 +17,8 @@ service AuthService {
 message RegisterRequest {
   string mail = 1;
   string password = 2;
+  string name = 3;
+  int32 age = 4;
 }
 
 message RegisterReply {
@@ -24,6 +26,7 @@ message RegisterReply {
     UNSPECIFIED = 0;
     VALIDATION_ERROR = 1;
     INVALID_REQUEST = 2;
+    STATUS_OK = 3;
   }
   ERR_INFO_REASON err_info_reason = 1;
   string message = 2;
@@ -39,6 +42,7 @@ message LoginReply {
     UNSPECIFIED = 0;
     VALIDATION_ERROR = 1;
     INVALID_REQUEST = 2;
+    STATUS_OK = 3;
   }
   ERR_INFO_REASON err_info_reason = 1;
   string message = 2;
@@ -49,6 +53,7 @@ message LogoutReply {
     UNSPECIFIED = 0;
     VALIDATION_ERROR = 1;
     INVALID_REQUEST = 2;
+    STATUS_OK = 3;
   }
   ERR_INFO_REASON err_info_reason = 1;
   string message = 2;
@@ -59,31 +64,17 @@ message RefreshReply {
     UNSPECIFIED = 0;
     VALIDATION_ERROR = 1;
     INVALID_REQUEST = 2;
+    STATUS_OK = 3;
   }
   ERR_INFO_REASON err_info_reason = 1;
   string message = 2;
 }
 
 service UserService {
-  rpc CreateUserDescription(CreateUserDescriptionRequest) returns (CreateUserDescriptionReply) {}
   rpc GetUsersList(google.protobuf.Empty) returns (GetUsersReply) {}
-  rpc GetUser(GetUserRequest) returns (GetUserReply) {}
-  rpc DeleteUsers(DeleteUsersRequest) returns (DeleteUsersReply) {}
+  rpc GetUser(google.protobuf.Empty) returns (GetUserReply) {}
+  rpc DeleteUsers(google.protobuf.Empty) returns (DeleteUsersReply) {}
   rpc UpdateUsers(UpdateUsersRequest) returns (UpdateUsersReply) {}
-}
-
-message CreateUserDescriptionReply {
-  enum ERR_INFO_REASON {
-    UNSPECIFIED = 0;
-    VALIDATION_ERROR = 1;
-    INVALID_REQUEST = 2;
-  }
-    string message = 1;
-}
-
-message CreateUserDescriptionRequest {
-  string name = 1;
-  int32 age = 2;
 }
 
 message GetUsersReply {
@@ -91,6 +82,7 @@ message GetUsersReply {
     UNSPECIFIED = 0;
     VALIDATION_ERROR = 1;
     INVALID_REQUEST = 2;
+    STATUS_OK = 3;
   }
   ERR_INFO_REASON err_info_reason = 1;
   repeated User users = 2;
@@ -105,29 +97,24 @@ message User {
   google.protobuf.Timestamp added_at = 6;
 }
 
-message GetUserRequest {
-  string id = 1;
-}
-
 message GetUserReply {
   enum ERR_INFO_REASON {
     UNSPECIFIED = 0;
     VALIDATION_ERROR = 1;
     INVALID_REQUEST = 2;
+    STATUS_OK = 3;
   }
   ERR_INFO_REASON err_info_reason = 1;
   User user = 2;
 }
 
-message DeleteUsersRequest {
-  string id = 1;
-}
 
 message DeleteUsersReply {
   enum ERR_INFO_REASON {
     UNSPECIFIED = 0;
     VALIDATION_ERROR = 1;
     INVALID_REQUEST = 2;
+    STATUS_OK = 3;
   }
   ERR_INFO_REASON err_info_reason = 1;
   User user = 2;
@@ -135,7 +122,6 @@ message DeleteUsersReply {
 }
 
 message UpdateUsersRequest {
-  string id = 1;
   UpdateUser updatedUser = 2;
 }
 
@@ -150,6 +136,7 @@ message UpdateUsersReply {
     UNSPECIFIED = 0;
     VALIDATION_ERROR = 1;
     INVALID_REQUEST = 2;
+    STATUS_OK = 3;
   }
   ERR_INFO_REASON err_info_reason = 1;
   User user = 2;

@@ -24,7 +24,11 @@ func Error(err error) error {
 	case errors.Is(err, shortcut.ErrInvalidToken),
 		errors.Is(err, shortcut.ErrInvalidTokenPair),
 		errors.Is(err, shortcut.ErrRefreshSessionNotFound),
-		errors.Is(err, shortcut.ErrRevokedSession):
+		errors.Is(err, shortcut.ErrRevokedSession),
+		errors.Is(err, shortcut.ErrEmptyFields),
+		errors.Is(err, shortcut.ErrAgeLimit),
+		errors.Is(err, shortcut.ErrNoRows),
+		errors.Is(err, shortcut.ErrEmptyCredentials):
 		return status.Error(codes.Unauthenticated, err.Error())
 
 	default:

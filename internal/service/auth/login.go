@@ -27,8 +27,6 @@ func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Toke
 		return &dto.Tokens{}, errors.New("wrong password or email")
 	}
 
-	now := time.Now()
-
 	accessTokenJTI := uuid.New()
 	accessToken, err := utils.GenerateAccessToken(account.ID, s.secret, accessTokenJTI.String())
 	if err != nil {
