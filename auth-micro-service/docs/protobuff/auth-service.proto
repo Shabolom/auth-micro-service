@@ -1,0 +1,158 @@
+syntax = "proto3";
+
+package platform.mvp;
+option go_package = "gen/auth/v1;authv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// AuthService
+service AuthService {
+  rpc Register(RegisterRequest) returns (RegisterReply) {}
+  rpc Login(LoginRequest) returns (LoginReply) {}
+  rpc Logout(google.protobuf.Empty) returns (LogoutReply) {}
+  rpc Refresh(google.protobuf.Empty) returns (RefreshReply) {}
+}
+
+message RegisterRequest {
+  string mail = 1;
+  string password = 2;
+}
+
+message RegisterReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+  }
+  ERR_INFO_REASON err_info_reason = 1;
+  string message = 2;
+}
+
+message LoginRequest {
+  string mail = 1;
+  string password = 2;
+}
+
+message LoginReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+  }
+  ERR_INFO_REASON err_info_reason = 1;
+  string message = 2;
+}
+
+message LogoutReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+  }
+  ERR_INFO_REASON err_info_reason = 1;
+  string message = 2;
+}
+
+message RefreshReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+  }
+  ERR_INFO_REASON err_info_reason = 1;
+  string message = 2;
+}
+
+service UserService {
+  rpc CreateUserDescription(CreateUserDescriptionRequest) returns (CreateUserDescriptionReply) {}
+  rpc GetUsersList(google.protobuf.Empty) returns (GetUsersReply) {}
+  rpc GetUser(GetUserRequest) returns (GetUserReply) {}
+  rpc DeleteUsers(DeleteUsersRequest) returns (DeleteUsersReply) {}
+  rpc UpdateUsers(UpdateUsersRequest) returns (UpdateUsersReply) {}
+}
+
+message CreateUserDescriptionReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+  }
+    string message = 1;
+}
+
+message CreateUserDescriptionRequest {
+  string name = 1;
+  int32 age = 2;
+}
+
+message GetUsersReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+  }
+  ERR_INFO_REASON err_info_reason = 1;
+  repeated User users = 2;
+}
+
+message User {
+  string id = 1;
+  string mail = 2;
+  string name = 3;
+  uint32 age = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp added_at = 6;
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+  }
+  ERR_INFO_REASON err_info_reason = 1;
+  User user = 2;
+}
+
+message DeleteUsersRequest {
+  string id = 1;
+}
+
+message DeleteUsersReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+  }
+  ERR_INFO_REASON err_info_reason = 1;
+  User user = 2;
+  string message = 3;
+}
+
+message UpdateUsersRequest {
+  string id = 1;
+  UpdateUser updatedUser = 2;
+}
+
+message UpdateUser {
+  string mail = 2;
+  string name = 3;
+  uint32 age = 4;
+}
+
+message UpdateUsersReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+  }
+  ERR_INFO_REASON err_info_reason = 1;
+  User user = 2;
+  string message = 3;
+}
+

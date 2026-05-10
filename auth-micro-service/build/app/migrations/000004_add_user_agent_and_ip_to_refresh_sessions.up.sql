@@ -1,0 +1,3 @@
+ALTER TABLE refresh_sessions
+ADD COLUMN user_agent TEXT NULL,
+ADD COLUMN ip TEXT NULL;
