@@ -2,6 +2,15 @@ version: '3.9'
 name: Auth_service
 
 services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: auth_service
+      RABBITMQ_DEFAULT_PASS: password
+
   postgres:
     image: postgres:16
     container_name: auth-micro-service-postgres
@@ -16,3 +25,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 volumes:
   postgres_data:
+
+networks:
+  authorization:
+    driver: bridge

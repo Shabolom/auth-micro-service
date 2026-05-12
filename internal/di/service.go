@@ -6,7 +6,7 @@ import (
 )
 
 func (d *DI) GetAuthService() *auth.Service {
-	return auth.New(d.GetAuthRepo(), d.GetInMemoryStorage(), d.Config().Secret, d.Logger())
+	return auth.New(d.GetAuthRepo(), d.GetPublisher(), d.GetInMemoryStorage(), d.Config().Secret, d.Logger())
 }
 
 func (d *DI) GetUserService() *user.Service {

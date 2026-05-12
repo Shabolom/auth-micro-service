@@ -2,12 +2,14 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
+	"auth-micro-service/pkg/shortcut"
 	"auth-micro-service/pkg/utils"
 	"context"
 	"errors"
 	"time"
 
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
 func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Tokens, error) {
@@ -30,26 +32,26 @@ func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Toke
 	accessTokenJTI := uuid.New()
 	accessToken, err := utils.GenerateAccessToken(account.ID, s.secret, accessTokenJTI.String())
 	if err != nil {
-		s.logger.Info("Error generating access token")
+		s.logger.Info("Error generating access token", zap.Error(err))
 		return &dto.Tokens{}, err
 	}
 
 	refreshTokenJTI := uuid.New()
 	refreshToken, err := utils.GenerateRefreshToken(account.ID, s.secret, refreshTokenJTI.String())
 	if err != nil {
-		s.logger.Info("Error generating refresh token")
+		s.logger.Info("Error generating refresh token", zap.Error(err))
 		return &dto.Tokens{}, err
 	}
 
 	hashToken, err := utils.Hash(refreshToken)
 	if err != nil {
-		s.logger.Info("Error hashing refresh token")
+		s.logger.Info("Error hashing refresh token", zap.Error(err))
 		return &dto.Tokens{}, err
 	}
 
 	userID, err := uuid.Parse(account.ID)
 	if err != nil {
-		s.logger.Info("Error parsing account id")
+		s.logger.Info("Error parsing account id", zap.Error(err))
 		return &dto.Tokens{}, err
 	}
 
@@ -65,12 +67,22 @@ func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Toke
 	}
 
 	if err = s.authRepo.CreateRefreshToken(ctx, repoRefreshToken); err != nil {
-		s.logger.Info("Error creating refresh token")
+		s.logger.Info("Error creating refresh token", zap.Error(err))
 		return &dto.Tokens{}, err
 	}
 
 	session := s.inmemorystorage.NewSession(account.ID)
 	s.inmemorystorage.Save(accessTokenJTI.String(), session)
+
+	go func(email string) {
+		publishCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		defer cancel()
+
+		err := s.rabbitMQ.Publish(publishCtx, "login", shortcut.TEXTTYPE, []byte(email))
+		if err != nil {
+			s.logger.Info("Error publishing login", zap.Error(err))
+		}
+	}(login.Email)
 
 	return &dto.Tokens{
 		AccessToken:  accessToken,

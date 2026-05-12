@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/labstack/gommon/log"
 	"go.uber.org/zap"
 )
 
@@ -89,6 +90,16 @@ func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (d
 
 	session := s.inmemorystorage.NewSession(userID.String())
 	s.inmemorystorage.Save(accessTokenJTI.String(), session)
+
+	go func(email string) {
+		publishCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		defer cancel()
+
+		err := s.rabbitMQ.Publish(publishCtx, "register", shortcut.TEXTTYPE, []byte(email))
+		if err != nil {
+			log.Error("Error publishing email", zap.Error(err))
+		}
+	}(register.Email)
 
 	return dto.Tokens{
 		AccessToken:  accessToken,

@@ -24,16 +24,25 @@ type SessionStorage interface {
 	Get(jti string) (inmemory.Session, bool)
 	Revoke(jti string)
 }
+
+type RabbitMQ interface {
+	Publish(ctx context.Context, routingKey string, contentType string, body []byte) error
+}
 type Service struct {
-	authRepo        AuthRepo
+	authRepo AuthRepo
+
+	rabbitMQ RabbitMQ
+
 	inmemorystorage SessionStorage
-	secret          string
-	logger          *zap.Logger
+
+	secret string
+	logger *zap.Logger
 }
 
-func New(authRepo AuthRepo, inmemorystorage SessionStorage, secret string, logger *zap.Logger) *Service {
+func New(authRepo AuthRepo, rabbitMQ RabbitMQ, inmemorystorage SessionStorage, secret string, logger *zap.Logger) *Service {
 	return &Service{
 		authRepo:        authRepo,
+		rabbitMQ:        rabbitMQ,
 		inmemorystorage: inmemorystorage,
 		secret:          secret,
 		logger:          logger,

@@ -9,6 +9,7 @@ import (
 	"auth-micro-service/internal/config"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/segmentio/kafka-go"
 	"go.uber.org/zap"
 )
@@ -18,6 +19,8 @@ type DI struct {
 	logger *zap.Logger
 
 	inmemoryStorage *inmemory.SessionStorage
+
+	RabbitMQConn *amqp.Connection
 
 	ctx           context.Context
 	pgConn        *pgxpool.Pool
@@ -81,4 +84,18 @@ func (d *DI) Logger() *zap.Logger {
 	_ = zap.ReplaceGlobals(logger)
 
 	return d.logger
+}
+
+func (d *DI) ShotDown() {
+	if d.RabbitMQConn == nil {
+		d.Logger().Error("RabbitMQ connection was not established")
+		return
+	}
+
+	err := d.RabbitMQConn.Close()
+	if err != nil {
+		d.logger.Error("failed to close RabbitMQ producer", zap.Error(err))
+	}
+
+	d.logger.Info("RabbitMQ producer was shut down")
 }
