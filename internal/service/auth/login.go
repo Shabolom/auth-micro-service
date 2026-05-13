@@ -74,7 +74,7 @@ func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Toke
 	session := s.redis.NewSession(account.ID)
 	err = s.redis.SaveSession(ctx, accessTokenJTI.String(), session, time.Minute*15)
 	if err != nil {
-		s.logger.Info("Error creating redis session", zap.Error(err))
+		s.logger.Info("Error creating redis-storage session", zap.Error(err))
 		return &dto.Tokens{}, err
 	}
 

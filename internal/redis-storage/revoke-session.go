@@ -1,4 +1,4 @@
-package redis
+package redisStorage
 
 import (
 	"context"
@@ -12,7 +12,7 @@ func (r *Redis) RevokeSession(ctx context.Context, key string) error {
 	}).Err()
 
 	if err != nil {
-		r.logger.Error("redis HSet", zap.Error(err))
+		r.logger.Error("redis-storage HSet", zap.Error(err))
 		return err
 	}
 

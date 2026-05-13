@@ -1,4 +1,4 @@
-package redis
+package redisStorage
 
 import (
 	"context"
@@ -20,7 +20,7 @@ func (r *Redis) SaveSession(ctx context.Context, key string, value *Session, exp
 
 	_, err := pipe.Exec(ctx)
 	if err != nil {
-		r.logger.Error("redis save-session", zap.Error(err))
+		r.logger.Error("redis-storage save-session", zap.Error(err))
 		return err
 	}
 

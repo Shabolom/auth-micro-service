@@ -91,7 +91,7 @@ func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (d
 	session := s.redis.NewSession(userID.String())
 	err = s.redis.SaveSession(ctx, accessTokenJTI.String(), session, time.Minute*15)
 	if err != nil {
-		s.logger.Info("Error redis save session", zap.Error(err))
+		s.logger.Info("Error redis-storage save session", zap.Error(err))
 		return dto.Tokens{}, err
 	}
 

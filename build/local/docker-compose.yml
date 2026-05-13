@@ -4,18 +4,35 @@ name: Auth_service
 services:
   redis:
     image: redis:7
-    container_name: redis
+    container_name: redis-storage
+    command: redis-server --requirepass password
     ports:
       - "6379:6379"
+    networks:
+      - authorization
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: redis-storage-insight
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+    networks:
+      - authorization
 
   rabbitmq:
     image: rabbitmq:4-management
+    container_name: rabbitmq-storage
     ports:
       - "5672:5672"
       - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: auth_service
       RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: /
+    networks:
+      - authorization
 
   postgres:
     image: postgres:16
@@ -29,6 +46,9 @@ services:
       - "5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - authorization
+
 volumes:
   postgres_data:
 

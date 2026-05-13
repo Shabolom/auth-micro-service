@@ -44,9 +44,9 @@ func (s *Service) DeleteUser(ctx context.Context, tokens *dto.Tokens) error {
 		return fmt.Errorf("Logout: %w", err)
 	}
 
-	err = s.redis.RevokeSession(ctx, accessTokenClaims.UserID)
+	err = s.redis.RevokeSession(ctx, accessTokenClaims.ID)
 	if err != nil {
-		s.logger.Error("redis revoke error")
+		s.logger.Error("redis-storage revoke error")
 		return err
 	}
 

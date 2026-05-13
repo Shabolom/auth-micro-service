@@ -8,10 +8,6 @@ import (
 )
 
 func (d *DI) NewRedisClient() *redis.Client {
-	if d.redis != nil {
-		return d.redis
-	}
-
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     d.Config().RedisDSN(),
 		Password: d.Config().Redis.RedisPassword,
@@ -31,8 +27,6 @@ func (d *DI) NewRedisClient() *redis.Client {
 	if err := rdb.Ping(d.ctx).Err(); err != nil {
 		d.Logger().Fatal("redis ping err :", zap.Error(err))
 	}
-
-	d.redis = rdb
 
 	return rdb
 }

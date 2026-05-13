@@ -2,6 +2,7 @@ package di
 
 import (
 	"auth-micro-service/internal/inmemory"
+	redisStorage "auth-micro-service/internal/redis-storage"
 	"context"
 	"fmt"
 	"time"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	amqp "github.com/rabbitmq/amqp091-go"
-	"github.com/redis/go-redis/v9"
 	"github.com/segmentio/kafka-go"
 	"go.uber.org/zap"
 )
@@ -23,7 +23,7 @@ type DI struct {
 
 	rabbitMQConn *amqp.Connection
 
-	redis *redis.Client
+	redis *redisStorage.Redis
 
 	ctx           context.Context
 	pgConn        *pgxpool.Pool
@@ -44,6 +44,17 @@ func (d *DI) GetInMemoryStorage() *inmemory.SessionStorage {
 	d.inmemoryStorage = inmemory.NewSessionStorage()
 	d.inmemoryStorage.StartCleaner(d.ctx, time.Minute*5)
 	return d.inmemoryStorage
+}
+
+func (d *DI) GetRedis() *redisStorage.Redis {
+	if d.redis != nil {
+		return d.redis
+	}
+
+	redis := d.GetRedisHandlers()
+	d.redis = redis
+
+	return redis
 }
 
 func (d *DI) Config() *config.Config {
@@ -99,6 +110,17 @@ func (d *DI) ShotDown() {
 	if err != nil {
 		d.logger.Error("failed to close RabbitMQ producer", zap.Error(err))
 	}
-
 	d.logger.Info("RabbitMQ producer was shut down")
+
+	if d.redis == nil {
+		d.Logger().Error("Redis connection was not established")
+		return
+	}
+
+	err = d.redis.Close()
+	if err != nil {
+		d.Logger().Error("failed to close Redis", zap.Error(err))
+		return
+	}
+	d.logger.Info("Redis producer was shut down")
 }

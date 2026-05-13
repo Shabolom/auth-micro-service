@@ -1,4 +1,4 @@
-package redis
+package redisStorage
 
 import "time"
 

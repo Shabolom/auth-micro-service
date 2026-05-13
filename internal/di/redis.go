@@ -1,7 +1,9 @@
 package di
 
-import "auth-micro-service/internal/redis"
+import (
+	"auth-micro-service/internal/redis-storage"
+)
 
-func (d *DI) GetRedisHandlers() *redis.Redis {
-	return redis.NewRedisPublisher(d.NewRedisClient(), d.Logger())
+func (d *DI) GetRedisHandlers() *redisStorage.Redis {
+	return redisStorage.NewRedisPublisher(d.NewRedisClient(), d.Logger())
 }

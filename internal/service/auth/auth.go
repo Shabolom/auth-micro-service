@@ -2,7 +2,7 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
-	"auth-micro-service/internal/redis"
+	"auth-micro-service/internal/redis-storage"
 	"context"
 	"time"
 
@@ -21,9 +21,9 @@ type AuthRepo interface {
 
 type Redis interface {
 	RevokeSession(ctx context.Context, key string) error
-	NewSession(userID string) *redis.Session
+	NewSession(userID string) *redisStorage.Session
 	CheckSessionStatus(ctx context.Context, jti string) error
-	SaveSession(ctx context.Context, key string, value *redis.Session, expiration time.Duration) error
+	SaveSession(ctx context.Context, key string, value *redisStorage.Session, expiration time.Duration) error
 }
 
 type RabbitMQ interface {

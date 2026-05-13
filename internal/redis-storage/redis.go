@@ -1,4 +1,4 @@
-package redis
+package redisStorage
 
 import (
 	"github.com/redis/go-redis/v9"
@@ -21,4 +21,14 @@ func NewRedisPublisher(client *redis.Client, logger *zap.Logger) *Redis {
 		client: client,
 		logger: logger,
 	}
+}
+
+func (r *Redis) Close() error {
+	err := r.client.Close()
+	if err != nil {
+		r.logger.Error("Error closing redis client", zap.Error(err))
+		return err
+	}
+
+	return nil
 }
