@@ -10,6 +10,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	amqp "github.com/rabbitmq/amqp091-go"
+	"github.com/redis/go-redis/v9"
 	"github.com/segmentio/kafka-go"
 	"go.uber.org/zap"
 )
@@ -20,7 +21,9 @@ type DI struct {
 
 	inmemoryStorage *inmemory.SessionStorage
 
-	RabbitMQConn *amqp.Connection
+	rabbitMQConn *amqp.Connection
+
+	redis *redis.Client
 
 	ctx           context.Context
 	pgConn        *pgxpool.Pool
@@ -87,12 +90,12 @@ func (d *DI) Logger() *zap.Logger {
 }
 
 func (d *DI) ShotDown() {
-	if d.RabbitMQConn == nil {
+	if d.rabbitMQConn == nil {
 		d.Logger().Error("RabbitMQ connection was not established")
 		return
 	}
 
-	err := d.RabbitMQConn.Close()
+	err := d.rabbitMQConn.Close()
 	if err != nil {
 		d.logger.Error("failed to close RabbitMQ producer", zap.Error(err))
 	}

@@ -6,8 +6,8 @@ import (
 )
 
 func (d *DI) GetRmq() *amqp.Connection {
-	if d.RabbitMQConn != nil {
-		return d.RabbitMQConn
+	if d.rabbitMQConn != nil {
+		return d.rabbitMQConn
 	}
 
 	conn, err := amqp.Dial(d.Config().RabbitMQDSN())
@@ -16,7 +16,7 @@ func (d *DI) GetRmq() *amqp.Connection {
 		return nil
 	}
 
-	d.RabbitMQConn = conn
+	d.rabbitMQConn = conn
 
 	return conn
 }

@@ -3,7 +3,9 @@ package auth
 import (
 	"auth-micro-service/internal/dto"
 	"auth-micro-service/internal/inmemory"
+	"auth-micro-service/internal/redis"
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -25,6 +27,13 @@ type SessionStorage interface {
 	Revoke(jti string)
 }
 
+type Redis interface {
+	RevokeSession(ctx context.Context, key string) error
+	NewSession(userID string) *redis.Session
+	CheckSessionStatus(ctx context.Context, jti string) error
+	SaveSession(ctx context.Context, key string, value *redis.Session, expiration time.Duration) error
+}
+
 type RabbitMQ interface {
 	Publish(ctx context.Context, routingKey string, contentType string, body []byte) error
 }
@@ -35,16 +44,19 @@ type Service struct {
 
 	inmemorystorage SessionStorage
 
+	redis Redis
+
 	secret string
 	logger *zap.Logger
 }
 
-func New(authRepo AuthRepo, rabbitMQ RabbitMQ, inmemorystorage SessionStorage, secret string, logger *zap.Logger) *Service {
+func New(authRepo AuthRepo, rabbitMQ RabbitMQ, inmemorystorage SessionStorage, redis Redis, secret string, logger *zap.Logger) *Service {
 	return &Service{
 		authRepo:        authRepo,
 		rabbitMQ:        rabbitMQ,
 		inmemorystorage: inmemorystorage,
 		secret:          secret,
 		logger:          logger,
+		redis:           redis,
 	}
 }

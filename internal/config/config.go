@@ -13,6 +13,7 @@ type Config struct {
 	Secret      string `envconfig:"APP_SECRET"`
 	Postgres    PostgresConfig
 	RabbitMQ    RabbitMQConfig
+	Redis       RedisConfig
 }
 
 type RabbitMQConfig struct {
@@ -21,6 +22,12 @@ type RabbitMQConfig struct {
 	Username string `envconfig:"RABBITMQ_USER"`
 	Password string `envconfig:"RABBITMQ_PASSWORD"`
 	VHOST    string `envconfig:"RABBITMQ_VHOST"`
+}
+
+type RedisConfig struct {
+	RedisHost     string `envconfig:"REDIS_HOST"`
+	RedisPort     string `envconfig:"REDIS_PORT"`
+	RedisPassword string `envconfig:"REDIS_PASSWORD"`
 }
 
 type PostgresConfig struct {
@@ -64,5 +71,12 @@ func (c *Config) RabbitMQDSN() string {
 		c.RabbitMQ.Host,
 		c.RabbitMQ.Port,
 		c.RabbitMQ.VHOST,
+	)
+}
+
+func (c *Config) RedisDSN() string {
+	return fmt.Sprintf("%s:%s",
+		c.Redis.RedisHost,
+		c.Redis.RedisPort,
 	)
 }

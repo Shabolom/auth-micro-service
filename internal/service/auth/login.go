@@ -71,6 +71,7 @@ func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Toke
 		return &dto.Tokens{}, err
 	}
 
+	//s.redis.NewSession(account.ID)
 	session := s.inmemorystorage.NewSession(account.ID)
 	s.inmemorystorage.Save(accessTokenJTI.String(), session)
 

@@ -6,9 +6,9 @@ import (
 )
 
 func (d *DI) GetAuthService() *auth.Service {
-	return auth.New(d.GetAuthRepo(), d.GetPublisher(), d.GetInMemoryStorage(), d.Config().Secret, d.Logger())
+	return auth.New(d.GetAuthRepo(), d.GetPublisher(), d.GetInMemoryStorage(), d.GetRedisHandlers(), d.Config().Secret, d.Logger())
 }
 
 func (d *DI) GetUserService() *user.Service {
-	return user.New(d.GetAuthRepo(), d.GetUserRepo(), d.GetInMemoryStorage(), d.Config().Secret, d.Logger())
+	return user.New(d.GetAuthRepo(), d.GetUserRepo(), d.GetInMemoryStorage(), d.GetRedisHandlers(), d.Config().Secret, d.Logger())
 }
