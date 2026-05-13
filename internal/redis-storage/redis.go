@@ -24,11 +24,9 @@ func NewRedisPublisher(client *redis.Client, logger *zap.Logger) *Redis {
 }
 
 func (r *Redis) Close() error {
-	err := r.client.Close()
-	if err != nil {
-		r.logger.Error("Error closing redis client", zap.Error(err))
-		return err
+	if r.client == nil {
+		return nil
 	}
 
-	return nil
+	return r.client.Close()
 }

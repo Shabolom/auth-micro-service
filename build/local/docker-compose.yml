@@ -1,5 +1,5 @@
 version: '3.9'
-name: Auth_service
+name: auth_service
 
 services:
   redis:
@@ -8,16 +8,20 @@ services:
     command: redis-server --requirepass password
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
     networks:
       - authorization
 
   redis-insight:
-    image: redis/redisinsight:latest
+    image: redis/redisinsight:2.68
     container_name: redis-storage-insight
     ports:
       - "5540:5540"
     depends_on:
       - redis
+    volumes:
+      - redis_insight_data:/data
     networks:
       - authorization
 
@@ -51,6 +55,8 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
+  redis_insight_data:
 
 networks:
   authorization:

@@ -1,6 +1,7 @@
 package di
 
 import (
+	"context"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -24,7 +25,10 @@ func (d *DI) NewRedisClient() *redis.Client {
 		PoolTimeout: 2 * time.Second,
 	})
 
-	if err := rdb.Ping(d.ctx).Err(); err != nil {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	if err := rdb.Ping(ctx).Err(); err != nil {
 		d.Logger().Fatal("redis ping err :", zap.Error(err))
 	}
 

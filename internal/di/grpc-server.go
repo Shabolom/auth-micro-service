@@ -71,7 +71,7 @@ func (d *DI) loggingInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor 
 
 		err = d.GetRedisHandlers().CheckSessionStatus(d.ctx, claims.ID)
 		if err == redis.Nil || err != nil {
-			d.Logger().Info("check error :", zap.String("id", claims.ID))
+			d.Logger().Info("check error :", zap.String("id", claims.ID), zap.Error(err))
 			return nil, status.Error(codes.Unauthenticated, errors.New("user is not authorized").Error())
 		}
 

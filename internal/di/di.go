@@ -101,26 +101,30 @@ func (d *DI) Logger() *zap.Logger {
 }
 
 func (d *DI) ShotDown() {
-	if d.rabbitMQConn == nil {
-		d.Logger().Error("RabbitMQ connection was not established")
-		return
+	log := d.Logger()
+
+	if d.rabbitMQConn != nil {
+		if err := d.rabbitMQConn.Close(); err != nil {
+			log.Error("failed to close RabbitMQ connection", zap.Error(err))
+		} else {
+			log.Info("RabbitMQ connection was shut down")
+		}
 	}
 
-	err := d.rabbitMQConn.Close()
-	if err != nil {
-		d.logger.Error("failed to close RabbitMQ producer", zap.Error(err))
-	}
-	d.logger.Info("RabbitMQ producer was shut down")
-
-	if d.redis == nil {
-		d.Logger().Error("Redis connection was not established")
-		return
+	if d.redis != nil {
+		if err := d.redis.Close(); err != nil {
+			log.Error("failed to close Redis", zap.Error(err))
+		} else {
+			log.Info("Redis was shut down")
+		}
 	}
 
-	err = d.redis.Close()
-	if err != nil {
-		d.Logger().Error("failed to close Redis", zap.Error(err))
-		return
+	if d.pgConn != nil {
+		d.pgConn.Close()
+		log.Info("Postgres connection pool was shut down")
 	}
-	d.logger.Info("Redis producer was shut down")
+
+	if d.logger != nil {
+		_ = d.logger.Sync()
+	}
 }
