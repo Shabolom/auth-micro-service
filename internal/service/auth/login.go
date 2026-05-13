@@ -71,9 +71,12 @@ func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Toke
 		return &dto.Tokens{}, err
 	}
 
-	//s.redis.NewSession(account.ID)
-	session := s.inmemorystorage.NewSession(account.ID)
-	s.inmemorystorage.Save(accessTokenJTI.String(), session)
+	session := s.redis.NewSession(account.ID)
+	err = s.redis.SaveSession(ctx, accessTokenJTI.String(), session, time.Minute*15)
+	if err != nil {
+		s.logger.Info("Error creating redis session", zap.Error(err))
+		return &dto.Tokens{}, err
+	}
 
 	go func(email string) {
 		publishCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

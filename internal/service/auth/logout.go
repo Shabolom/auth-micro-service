@@ -7,6 +7,7 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
 func (s *Service) Logout(ctx context.Context, userAgent string, tokens *dto.Tokens) error {
@@ -50,7 +51,11 @@ func (s *Service) Logout(ctx context.Context, userAgent string, tokens *dto.Toke
 		return err
 	}
 
-	s.inmemorystorage.Revoke(accessTokenClaims.ID)
+	err = s.redis.RevokeSession(ctx, accessTokenClaims.ID)
+	if err != nil {
+		s.logger.Info("revoke err:", zap.Error(err))
+		return err
+	}
 
 	return nil
 }

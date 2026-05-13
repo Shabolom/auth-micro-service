@@ -2,7 +2,6 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
-	"auth-micro-service/internal/inmemory"
 	"auth-micro-service/internal/redis"
 	"context"
 	"time"
@@ -20,13 +19,6 @@ type AuthRepo interface {
 	UpdateRefreshTokenByID(ctx context.Context, oldJTI uuid.UUID, session *dto.RefreshToken) error
 }
 
-type SessionStorage interface {
-	NewSession(userID string) inmemory.Session
-	Save(jti string, session inmemory.Session)
-	Get(jti string) (inmemory.Session, bool)
-	Revoke(jti string)
-}
-
 type Redis interface {
 	RevokeSession(ctx context.Context, key string) error
 	NewSession(userID string) *redis.Session
@@ -42,21 +34,18 @@ type Service struct {
 
 	rabbitMQ RabbitMQ
 
-	inmemorystorage SessionStorage
-
 	redis Redis
 
 	secret string
 	logger *zap.Logger
 }
 
-func New(authRepo AuthRepo, rabbitMQ RabbitMQ, inmemorystorage SessionStorage, redis Redis, secret string, logger *zap.Logger) *Service {
+func New(authRepo AuthRepo, rabbitMQ RabbitMQ, redis Redis, secret string, logger *zap.Logger) *Service {
 	return &Service{
-		authRepo:        authRepo,
-		rabbitMQ:        rabbitMQ,
-		inmemorystorage: inmemorystorage,
-		secret:          secret,
-		logger:          logger,
-		redis:           redis,
+		authRepo: authRepo,
+		rabbitMQ: rabbitMQ,
+		secret:   secret,
+		logger:   logger,
+		redis:    redis,
 	}
 }

@@ -20,10 +20,6 @@ type RefreshTokenRepo interface {
 	Logout(ctx context.Context, id uuid.UUID) error
 }
 
-type InMemoryCache interface {
-	Revoke(jti string)
-}
-
 type Redis interface {
 	RevokeSession(ctx context.Context, key string) error
 }
@@ -32,21 +28,18 @@ type Service struct {
 
 	refreshTokenRepo RefreshTokenRepo
 
-	inMemoryCache InMemoryCache
-
 	redis Redis
 
 	secret string
 	logger *zap.Logger
 }
 
-func New(refreshTokenRepo RefreshTokenRepo, userRepo UserRepo, inMemoryCache InMemoryCache, redis Redis, secret string, logger *zap.Logger) *Service {
+func New(refreshTokenRepo RefreshTokenRepo, userRepo UserRepo, redis Redis, secret string, logger *zap.Logger) *Service {
 	return &Service{
 		refreshTokenRepo: refreshTokenRepo,
 		userRepo:         userRepo,
 		secret:           secret,
 		logger:           logger,
-		inMemoryCache:    inMemoryCache,
 		redis:            redis,
 	}
 }

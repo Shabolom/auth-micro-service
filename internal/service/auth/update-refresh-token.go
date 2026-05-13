@@ -97,11 +97,18 @@ func (s *Service) UpdateRefreshToken(ctx context.Context, oldTokens *dto.Tokens,
 		return dto.Tokens{}, err
 	}
 
-	s.inmemorystorage.Revoke(oldAccessTokenClaims.ID)
+	err = s.redis.RevokeSession(ctx, oldRefreshTokenClaims.ID)
+	if err != nil {
+		s.logger.Info("Revoke old refresh token", zap.Error(err))
+		return dto.Tokens{}, err
+	}
 
-	session := s.inmemorystorage.NewSession(userID.String())
-
-	s.inmemorystorage.Save(newAccessJTI.String(), session)
+	session := s.redis.NewSession(userID.String())
+	err = s.redis.SaveSession(ctx, newAccessJTI.String(), session, time.Minute*15)
+	if err != nil {
+		s.logger.Info("Save new access jti", zap.Error(err))
+		return dto.Tokens{}, err
+	}
 
 	return dto.Tokens{
 		RefreshToken: refreshToken,

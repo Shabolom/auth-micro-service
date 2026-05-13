@@ -50,7 +50,5 @@ func (s *Service) DeleteUser(ctx context.Context, tokens *dto.Tokens) error {
 		return err
 	}
 
-	s.inMemoryCache.Revoke(accessTokenClaims.UserID)
-
 	return nil
 }
