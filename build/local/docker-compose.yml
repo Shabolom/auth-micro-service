@@ -1,0 +1,63 @@
+version: '3.9'
+name: auth_service
+
+services:
+  redis:
+    image: redis:7
+    container_name: redis-storage
+    command: redis-server --requirepass password
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - authorization
+
+  redis-insight:
+    image: redis/redisinsight:2.68
+    container_name: redis-storage-insight
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+    volumes:
+      - redis_insight_data:/data
+    networks:
+      - authorization
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq-storage
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: auth_service
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: /
+    networks:
+      - authorization
+
+  postgres:
+    image: postgres:16
+    container_name: auth-micro-service-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: auth_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - authorization
+
+volumes:
+  postgres_data:
+  redis_data:
+  redis_insight_data:
+
+networks:
+  authorization:
+    driver: bridge

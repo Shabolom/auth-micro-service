@@ -2,8 +2,9 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
-	"auth-micro-service/internal/inmemory"
+	"auth-micro-service/internal/redis-storage"
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -18,24 +19,33 @@ type AuthRepo interface {
 	UpdateRefreshTokenByID(ctx context.Context, oldJTI uuid.UUID, session *dto.RefreshToken) error
 }
 
-type SessionStorage interface {
-	NewSession(userID string) inmemory.Session
-	Save(jti string, session inmemory.Session)
-	Get(jti string) (inmemory.Session, bool)
-	Revoke(jti string)
-}
-type Service struct {
-	authRepo        AuthRepo
-	inmemorystorage SessionStorage
-	secret          string
-	logger          *zap.Logger
+type Redis interface {
+	RevokeSession(ctx context.Context, key string) error
+	NewSession(userID string) *redisStorage.Session
+	CheckSessionStatus(ctx context.Context, jti string) error
+	SaveSession(ctx context.Context, key string, value *redisStorage.Session, expiration time.Duration) error
 }
 
-func New(authRepo AuthRepo, inmemorystorage SessionStorage, secret string, logger *zap.Logger) *Service {
+type RabbitMQ interface {
+	Publish(ctx context.Context, routingKey string, contentType string, body []byte) error
+}
+type Service struct {
+	authRepo AuthRepo
+
+	rabbitMQ RabbitMQ
+
+	redis Redis
+
+	secret string
+	logger *zap.Logger
+}
+
+func New(authRepo AuthRepo, rabbitMQ RabbitMQ, redis Redis, secret string, logger *zap.Logger) *Service {
 	return &Service{
-		authRepo:        authRepo,
-		inmemorystorage: inmemorystorage,
-		secret:          secret,
-		logger:          logger,
+		authRepo: authRepo,
+		rabbitMQ: rabbitMQ,
+		secret:   secret,
+		logger:   logger,
+		redis:    redis,
 	}
 }

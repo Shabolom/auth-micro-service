@@ -11,7 +11,7 @@ import (
 )
 
 type LogoutService interface {
-	Logout(ctx context.Context, tokens *dto.Tokens) error
+	Logout(ctx context.Context, userAgent string, tokens *dto.Tokens) error
 }
 
 type Handler struct {
@@ -25,16 +25,19 @@ func New(logoutService LogoutService) *Handler {
 }
 
 func (h *Handler) Logout(ctx context.Context, req *emptypb.Empty) (*authv1.LogoutReply, error) {
+	_, userAgent := utils.IpUserAgentFromMetadata(ctx)
+
 	refToken, err := utils.RefreshTokenFromMetadata(ctx)
 	if err != nil {
 		return nil, render.Error(err)
 	}
+
 	accessToken, err := utils.AccessTokenFromMetadata(ctx)
 	if err != nil {
 		return nil, render.Error(err)
 	}
 
-	err = h.logoutService.Logout(ctx, &dto.Tokens{
+	err = h.logoutService.Logout(ctx, userAgent, &dto.Tokens{
 		RefreshToken: refToken,
 		AccessToken:  accessToken,
 	},
@@ -45,6 +48,7 @@ func (h *Handler) Logout(ctx context.Context, req *emptypb.Empty) (*authv1.Logou
 	}
 
 	return &authv1.LogoutReply{
-		Message: "success",
+		ErrInfoReason: authv1.LogoutReply_STATUS_OK,
+		Message:       "success",
 	}, nil
 }

@@ -80,8 +80,12 @@ func (s *Service) Refresh(ctx context.Context, oldRefToken string, userAgent str
 		return &dto.Tokens{}, err
 	}
 
-	session := s.inmemorystorage.NewSession(userID.String())
-	s.inmemorystorage.Save(newAccessJTI.String(), session)
+	session := s.redis.NewSession(userID.String())
+	err = s.redis.SaveSession(ctx, newAccessJTI.String(), session, time.Minute*15)
+	if err != nil {
+		s.logger.Info("Save session", zap.Error(err))
+		return &dto.Tokens{}, err
+	}
 
 	return &dto.Tokens{
 		RefreshToken: newRefreshToken,

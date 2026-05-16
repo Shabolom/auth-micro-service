@@ -11,7 +11,7 @@ import (
 )
 
 type UsersListService interface {
-	GetAccounts(ctx context.Context) ([]dto.AccountAndUser, error)
+	GetUsers(ctx context.Context) ([]*dto.AccountAndUser, error)
 }
 
 type Handler struct {
@@ -25,7 +25,7 @@ func New(getUsersListService UsersListService) *Handler {
 }
 
 func (h *Handler) GetUsersList(ctx context.Context, req *emptypb.Empty) (*authv1.GetUsersReply, error) {
-	accounts, err := h.usersListService.GetAccounts(ctx)
+	accounts, err := h.usersListService.GetUsers(ctx)
 	if err != nil {
 		return nil, render.Error(err)
 	}
@@ -34,30 +34,19 @@ func (h *Handler) GetUsersList(ctx context.Context, req *emptypb.Empty) (*authv1
 
 	for _, account := range accounts {
 		user := &authv1.User{
-			Id:   account.ID,
-			Mail: account.Email,
-		}
-
-		if account.CreatedAt != nil {
-			user.CreatedAt = timestamppb.New(*account.CreatedAt)
-		}
-
-		if account.UpdatedAt != nil {
-			user.AddedAt = timestamppb.New(*account.UpdatedAt)
-		}
-
-		if account.Name != nil {
-			user.Name = *account.Name
-		}
-
-		if account.Age != nil {
-			user.Age = uint32(*account.Age)
+			Id:        account.ID,
+			Mail:      account.Email,
+			Name:      account.Name,
+			Age:       uint32(account.Age),
+			CreatedAt: timestamppb.New(account.CreatedAt),
+			AddedAt:   timestamppb.New(account.UpdatedAt),
 		}
 
 		users = append(users, user)
 	}
 
 	return &authv1.GetUsersReply{
-		Users: users,
+		ErrInfoReason: authv1.GetUsersReply_STATUS_OK,
+		Users:         users,
 	}, nil
 }

@@ -2,6 +2,7 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
+	"auth-micro-service/pkg/shortcut"
 	"auth-micro-service/pkg/utils"
 	"context"
 	"errors"
@@ -37,14 +38,18 @@ func (s *Service) UpdateRefreshToken(ctx context.Context, oldTokens *dto.Tokens,
 
 	refreshTokenHash, err := s.authRepo.GetActiveRefreshToken(ctx, oldRefreshTokenClaims.ID, oldRefreshTokenClaims.UserID, userAgent)
 	if err != nil {
-		s.logger.Info("Get active refresh token", zap.Error(err))
-		return dto.Tokens{}, err
+		if !errors.Is(err, shortcut.ErrNoRows) {
+			s.logger.Info("Get active refresh token", zap.Error(err))
+			return dto.Tokens{}, err
+		}
 	}
 
-	err = utils.Compare(refreshTokenHash, oldTokens.RefreshToken)
-	if err != nil {
-		s.logger.Info("Compare refresh token", zap.Error(err))
-		return dto.Tokens{}, err
+	if refreshTokenHash != "" {
+		err = utils.Compare(refreshTokenHash, oldTokens.RefreshToken)
+		if err != nil {
+			s.logger.Info("Compare refresh token", zap.Error(err))
+			return dto.Tokens{}, err
+		}
 	}
 
 	oldJTIUUID, err := uuid.Parse(oldRefreshTokenClaims.ID)
@@ -92,11 +97,18 @@ func (s *Service) UpdateRefreshToken(ctx context.Context, oldTokens *dto.Tokens,
 		return dto.Tokens{}, err
 	}
 
-	s.inmemorystorage.Revoke(oldAccessTokenClaims.ID)
+	err = s.redis.RevokeSession(ctx, oldRefreshTokenClaims.ID)
+	if err != nil {
+		s.logger.Info("Revoke old refresh token", zap.Error(err))
+		return dto.Tokens{}, err
+	}
 
-	session := s.inmemorystorage.NewSession(userID.String())
-
-	s.inmemorystorage.Save(newAccessJTI.String(), session)
+	session := s.redis.NewSession(userID.String())
+	err = s.redis.SaveSession(ctx, newAccessJTI.String(), session, time.Minute*15)
+	if err != nil {
+		s.logger.Info("Save new access jti", zap.Error(err))
+		return dto.Tokens{}, err
+	}
 
 	return dto.Tokens{
 		RefreshToken: refreshToken,

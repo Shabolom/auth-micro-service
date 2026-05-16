@@ -3,6 +3,7 @@ package di
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -20,16 +21,16 @@ func (d *DI) GetPgDatabase() *pgxpool.Pool {
 
 	cfg, err := pgxpool.ParseConfig(d.Config().DatabaseURL())
 	if err != nil {
-		panic(fmt.Errorf("parse database url: %w", err))
+		log.Fatal(fmt.Errorf("parse database url: %w", err))
 	}
 
 	pool, err := pgxpool.NewWithConfig(ctx, cfg)
 	if err != nil {
-		panic(fmt.Errorf("create pg pool: %w", err))
+		log.Fatal(fmt.Errorf("create pg pool: %w", err))
 	}
 
 	if err = pool.Ping(ctx); err != nil {
-		panic(fmt.Errorf("ping database: %w", err))
+		log.Fatal(fmt.Errorf("ping database: %w", err))
 	}
 
 	d.pgConn = pool

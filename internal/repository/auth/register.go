@@ -15,12 +15,16 @@ func (s *Storage) Register(ctx context.Context, reg *dto.Register) error {
 		INSERT INTO accounts (
 			id,
 			email,
-			password_hash
+			password_hash,
+			name,
+			age
 		)
 		VALUES (
 			$1,
 			$2,
-			$3
+			$3,
+			$4,
+			$5
 		)
 	`
 
@@ -28,11 +32,15 @@ func (s *Storage) Register(ctx context.Context, reg *dto.Register) error {
 		reg.ID,
 		reg.Email,
 		reg.PasswordHash,
+		reg.Name,
+		reg.Age,
 	)
 	if err != nil {
 		var pgErr *pgconn.PgError
+
 		if errors.As(err, &pgErr) {
-			if pgErr.Code == "23505" && pgErr.ConstraintName == "ux_accounts_email" {
+			if pgErr.Code == "23505" &&
+				pgErr.ConstraintName == "ux_accounts_email" {
 				return shortcut.ErrEmailAlreadyExists
 			}
 		}

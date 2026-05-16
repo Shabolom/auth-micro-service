@@ -12,6 +12,22 @@ type Config struct {
 	GRPCPort    string `envconfig:"APP_GRPC_ADDRESS"`
 	Secret      string `envconfig:"APP_SECRET"`
 	Postgres    PostgresConfig
+	RabbitMQ    RabbitMQConfig
+	Redis       RedisConfig
+}
+
+type RabbitMQConfig struct {
+	Host     string `envconfig:"RABBITMQ_HOST"`
+	Port     string `envconfig:"RABBITMQ_PORT"`
+	Username string `envconfig:"RABBITMQ_USER"`
+	Password string `envconfig:"RABBITMQ_PASSWORD"`
+	VHOST    string `envconfig:"RABBITMQ_VHOST"`
+}
+
+type RedisConfig struct {
+	RedisHost     string `envconfig:"REDIS_HOST"`
+	RedisPort     string `envconfig:"REDIS_PORT"`
+	RedisPassword string `envconfig:"REDIS_PASSWORD"`
 }
 
 type PostgresConfig struct {
@@ -44,5 +60,23 @@ func (c *Config) DatabaseURL() string {
 		c.Postgres.Port,
 		c.Postgres.Database,
 		c.Postgres.SSLMode,
+	)
+}
+
+func (c *Config) RabbitMQDSN() string {
+	return fmt.Sprintf(
+		"amqp://%s:%s@%s:%s/%s",
+		c.RabbitMQ.Username,
+		c.RabbitMQ.Password,
+		c.RabbitMQ.Host,
+		c.RabbitMQ.Port,
+		c.RabbitMQ.VHOST,
+	)
+}
+
+func (c *Config) RedisDSN() string {
+	return fmt.Sprintf("%s:%s",
+		c.Redis.RedisHost,
+		c.Redis.RedisPort,
 	)
 }

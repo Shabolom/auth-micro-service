@@ -7,11 +7,11 @@ import (
 
 func (s *Storage) DeleteUser(ctx context.Context, accountID string) error {
 	const query = `
-		UPDATE users
+		UPDATE accounts
 		SET
 			deleted_at = NOW(),
 			updated_at = NOW()
-		WHERE account_id = $1
+		WHERE id = $1
 		  AND deleted_at IS NULL
 	`
 

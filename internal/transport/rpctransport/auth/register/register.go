@@ -13,7 +13,7 @@ import (
 )
 
 type RegisterService interface {
-	Register(ctx context.Context, request dto.RegisterRequest) (dto.Tokens, error)
+	Register(ctx context.Context, request *dto.RegisterRequest) (dto.Tokens, error)
 }
 
 type Handler struct {
@@ -29,11 +29,13 @@ func New(registerService RegisterService) *Handler {
 func (h *Handler) Register(ctx context.Context, req *authv1.RegisterRequest) (*authv1.RegisterReply, error) {
 	ip, userAgent := getRequestInfo(ctx)
 
-	registerRequest := dto.RegisterRequest{
+	registerRequest := &dto.RegisterRequest{
 		Email:     req.GetMail(),
 		Password:  req.GetPassword(),
 		IP:        ip,
 		UserAgent: userAgent,
+		Name:      req.GetName(),
+		Age:       int(req.GetAge()),
 	}
 
 	tokens, err := h.registerService.Register(ctx, registerRequest)
@@ -47,7 +49,8 @@ func (h *Handler) Register(ctx context.Context, req *authv1.RegisterRequest) (*a
 	}
 
 	return &authv1.RegisterReply{
-		Message: "registered success",
+		ErrInfoReason: authv1.RegisterReply_STATUS_OK,
+		Message:       "registered success",
 	}, nil
 }
 

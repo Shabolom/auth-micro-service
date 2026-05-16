@@ -6,7 +6,6 @@ import (
 	"auth-micro-service/internal/transport/rpctransport/auth/logout"
 	"auth-micro-service/internal/transport/rpctransport/auth/refresh_handler"
 	"auth-micro-service/internal/transport/rpctransport/auth/register"
-	user_description "auth-micro-service/internal/transport/rpctransport/user/create-description"
 	user_delete "auth-micro-service/internal/transport/rpctransport/user/delete"
 	user_get "auth-micro-service/internal/transport/rpctransport/user/get"
 	user_list "auth-micro-service/internal/transport/rpctransport/user/list"
@@ -15,16 +14,11 @@ import (
 
 func (d *DI) GetGRPCUsersHandlers() *rpctransport.UsersHandlers {
 	return rpctransport.NewUsersHandlers(
-		d.GetUserDescriptionHandler(),
 		d.GetUserDeleteHandler(),
 		d.GetUserHandler(),
 		d.GetListUserHandler(),
 		d.GetUpdateUserHandler(),
 	)
-}
-
-func (d *DI) GetUserDescriptionHandler() *user_description.Handler {
-	return user_description.New(d.GetUserService())
 }
 
 func (d *DI) GetUserDeleteHandler() *user_delete.Handler {

@@ -2,6 +2,7 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
+	"auth-micro-service/internal/rabbitMQ"
 	"auth-micro-service/pkg/shortcut"
 	"auth-micro-service/pkg/utils"
 	"context"
@@ -9,18 +10,20 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/labstack/gommon/log"
 	"go.uber.org/zap"
 )
 
 const refreshTokenTTL = 72 * time.Hour
 
-func (s *Service) Register(ctx context.Context, request dto.RegisterRequest) (dto.Tokens, error) {
-	if request.Email == "" || request.Password == "" {
-		s.logger.Warn("register email or password is empty")
-		return dto.Tokens{}, errors.New("email or password is empty")
-	}
+var now = time.Now()
 
-	now := time.Now()
+func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (dto.Tokens, error) {
+	err := s.requestValidate(request)
+	if err != nil {
+		s.logger.Info("validation error", zap.Error(err))
+		return dto.Tokens{}, err
+	}
 
 	hashPassword, err := utils.Hash(request.Password)
 	if err != nil {
@@ -34,6 +37,8 @@ func (s *Service) Register(ctx context.Context, request dto.RegisterRequest) (dt
 		ID:           userID.String(),
 		Email:        request.Email,
 		PasswordHash: hashPassword,
+		Name:         request.Name,
+		Age:          request.Age,
 		CreatedAt:    now,
 		UpdatedAt:    now,
 	}
@@ -84,11 +89,41 @@ func (s *Service) Register(ctx context.Context, request dto.RegisterRequest) (dt
 		return dto.Tokens{}, err
 	}
 
-	session := s.inmemorystorage.NewSession(userID.String())
-	s.inmemorystorage.Save(accessTokenJTI.String(), session)
+	session := s.redis.NewSession(userID.String())
+	err = s.redis.SaveSession(ctx, accessTokenJTI.String(), session, time.Minute*15)
+	if err != nil {
+		s.logger.Info("Error redis-storage save session", zap.Error(err))
+		return dto.Tokens{}, err
+	}
+
+	go func(email string) {
+		publishCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		defer cancel()
+
+		err := s.rabbitMQ.Publish(publishCtx, "register", rabbitMQ.TEXTTYPE, []byte(email))
+		if err != nil {
+			log.Error("Error publishing email", zap.Error(err))
+		}
+	}(register.Email)
 
 	return dto.Tokens{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}, nil
+}
+
+func (s *Service) requestValidate(req *dto.RegisterRequest) error {
+	if req.Email == "" || len(req.Password) < 5 {
+		return shortcut.ErrEmptyCredentials
+	}
+	if req.Name == "" || req.Age <= 0 {
+		return shortcut.ErrEmptyFields
+	}
+
+	err := utils.ValidateEmail(req.Email)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

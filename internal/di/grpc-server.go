@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -68,9 +69,9 @@ func (d *DI) loggingInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor 
 			return nil, status.Error(codes.Unauthenticated, err.Error())
 		}
 
-		session, ok := d.GetInMemoryStorage().Get(claims.ID)
-		if !ok || session.Revoked {
-			logger.Info("session is invalid", zap.String("id", claims.ID))
+		err = d.GetRedisHandlers().CheckSessionStatus(d.ctx, claims.ID)
+		if err == redis.Nil || err != nil {
+			d.Logger().Info("check error :", zap.String("id", claims.ID), zap.Error(err))
 			return nil, status.Error(codes.Unauthenticated, errors.New("user is not authorized").Error())
 		}
 

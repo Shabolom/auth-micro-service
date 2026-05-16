@@ -6,11 +6,7 @@ import (
 	"auth-micro-service/internal/render"
 	"auth-micro-service/pkg/utils"
 	"context"
-	"log"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/peer"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -28,21 +24,7 @@ func New(refreshService RefreshService) *Handler {
 	}
 }
 func (s *Handler) Refresh(ctx context.Context, req *emptypb.Empty) (*authv1.RefreshReply, error) {
-	ip := ""
-	userAgent := ""
-
-	md, ok := metadata.FromIncomingContext(ctx)
-	if ok {
-		agents := md.Get("user-agent")
-		if len(agents) > 0 {
-			userAgent = agents[0]
-		}
-	}
-
-	p, ok := peer.FromContext(ctx)
-	if ok {
-		ip = p.Addr.String()
-	}
+	ip, userAgent := utils.IpUserAgentFromMetadata(ctx)
 
 	oldRefreshToken, err := utils.RefreshTokenFromMetadata(ctx)
 	if err != nil {
@@ -54,17 +36,13 @@ func (s *Handler) Refresh(ctx context.Context, req *emptypb.Empty) (*authv1.Refr
 		return nil, render.Error(err)
 	}
 
-	header := metadata.Pairs(
-		"authorization", "Bearer "+tokens.AccessToken,
-		"refresh-token", "Bearer "+tokens.RefreshToken,
-	)
-
-	if err = grpc.SetHeader(ctx, header); err != nil {
-		log.Println(err)
+	err = utils.SetMetadataHeaderTokens(ctx, tokens)
+	if err != nil {
 		return nil, render.Error(err)
 	}
 
 	return &authv1.RefreshReply{
-		Message: "success",
+		ErrInfoReason: authv1.RefreshReply_STATUS_OK,
+		Message:       "success",
 	}, nil
 }

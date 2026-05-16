@@ -25,9 +25,7 @@ func (s *Storage) CreateRefreshToken(ctx context.Context, session *dto.RefreshTo
 		)
 	`
 
-	_, err := s.conn.Exec(
-		ctx,
-		query,
+	_, err := s.conn.Exec(ctx, query,
 		session.ID,
 		session.UserID,
 		session.TokenHash,

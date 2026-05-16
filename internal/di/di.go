@@ -2,6 +2,7 @@ package di
 
 import (
 	"auth-micro-service/internal/inmemory"
+	redisStorage "auth-micro-service/internal/redis-storage"
 	"context"
 	"fmt"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"auth-micro-service/internal/config"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/segmentio/kafka-go"
 	"go.uber.org/zap"
 )
@@ -18,6 +20,10 @@ type DI struct {
 	logger *zap.Logger
 
 	inmemoryStorage *inmemory.SessionStorage
+
+	rabbitMQConn *amqp.Connection
+
+	redis *redisStorage.Redis
 
 	ctx           context.Context
 	pgConn        *pgxpool.Pool
@@ -81,4 +87,33 @@ func (d *DI) Logger() *zap.Logger {
 	_ = zap.ReplaceGlobals(logger)
 
 	return d.logger
+}
+
+func (d *DI) ShotDown() {
+	log := d.Logger()
+
+	if d.rabbitMQConn != nil {
+		if err := d.rabbitMQConn.Close(); err != nil {
+			log.Error("failed to close RabbitMQ connection", zap.Error(err))
+		} else {
+			log.Info("RabbitMQ connection was shut down")
+		}
+	}
+
+	if d.redis != nil {
+		if err := d.redis.Close(); err != nil {
+			log.Error("failed to close Redis", zap.Error(err))
+		} else {
+			log.Info("Redis was shut down")
+		}
+	}
+
+	if d.pgConn != nil {
+		d.pgConn.Close()
+		log.Info("Postgres connection pool was shut down")
+	}
+
+	if d.logger != nil {
+		_ = d.logger.Sync()
+	}
 }

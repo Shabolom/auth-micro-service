@@ -6,23 +6,19 @@ import (
 	"fmt"
 )
 
-func (s *Storage) GetAccountByID(ctx context.Context, accountID string) (*dto.AccountAndUser, error) {
+func (s *Storage) GetUserByID(ctx context.Context, accountID string) (*dto.AccountAndUser, error) {
 	const query = `
 		SELECT
-			a.id,
-			a.email,
-			a.created_at,
-			a.updated_at,
-			a.deleted_at,
-
-			u.name,
-			u.age
-		FROM accounts a
-		LEFT JOIN users u
-			ON u.account_id = a.id
-			AND u.deleted_at IS NULL
-		WHERE a.id = $1
-		  AND a.deleted_at IS NULL
+			id,
+			email,
+			created_at,
+			updated_at,
+			deleted_at,
+			name,
+			age
+		FROM accounts
+		WHERE id = $1
+		  AND deleted_at IS NULL
 	`
 
 	var account dto.AccountAndUser
@@ -33,12 +29,11 @@ func (s *Storage) GetAccountByID(ctx context.Context, accountID string) (*dto.Ac
 		&account.CreatedAt,
 		&account.UpdatedAt,
 		&account.DeletedAt,
-
 		&account.Name,
 		&account.Age,
 	)
 	if err != nil {
-		return &dto.AccountAndUser{}, fmt.Errorf("GetAccountByID: %w", err)
+		return &dto.AccountAndUser{}, fmt.Errorf("GetUserByID: %w", err)
 	}
 
 	return &account, nil
