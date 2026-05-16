@@ -28,6 +28,7 @@ func Error(err error) error {
 		errors.Is(err, shortcut.ErrEmptyFields),
 		errors.Is(err, shortcut.ErrAgeLimit),
 		errors.Is(err, shortcut.ErrNoRows),
+		errors.Is(err, shortcut.ErrValidateEmail),
 		errors.Is(err, shortcut.ErrEmptyCredentials):
 		return status.Error(codes.Unauthenticated, err.Error())
 

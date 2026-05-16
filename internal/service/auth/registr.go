@@ -2,6 +2,7 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
+	"auth-micro-service/internal/rabbitMQ"
 	"auth-micro-service/pkg/shortcut"
 	"auth-micro-service/pkg/utils"
 	"context"
@@ -18,7 +19,7 @@ const refreshTokenTTL = 72 * time.Hour
 var now = time.Now()
 
 func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (dto.Tokens, error) {
-	err := requestValidate(request)
+	err := s.requestValidate(request)
 	if err != nil {
 		s.logger.Info("validation error", zap.Error(err))
 		return dto.Tokens{}, err
@@ -99,7 +100,7 @@ func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (d
 		publishCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 		defer cancel()
 
-		err := s.rabbitMQ.Publish(publishCtx, "register", shortcut.TEXTTYPE, []byte(email))
+		err := s.rabbitMQ.Publish(publishCtx, "register", rabbitMQ.TEXTTYPE, []byte(email))
 		if err != nil {
 			log.Error("Error publishing email", zap.Error(err))
 		}
@@ -111,13 +112,17 @@ func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (d
 	}, nil
 }
 
-func requestValidate(req *dto.RegisterRequest) error {
-
-	if req.Email == "" || req.Password == "" {
+func (s *Service) requestValidate(req *dto.RegisterRequest) error {
+	if req.Email == "" || len(req.Password) < 5 {
 		return shortcut.ErrEmptyCredentials
 	}
 	if req.Name == "" || req.Age <= 0 {
 		return shortcut.ErrEmptyFields
+	}
+
+	err := utils.ValidateEmail(req.Email)
+	if err != nil {
+		return err
 	}
 
 	return nil

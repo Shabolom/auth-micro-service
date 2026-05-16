@@ -3,7 +3,6 @@ package redisStorage
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strconv"
 
 	"github.com/redis/go-redis/v9"
@@ -11,7 +10,6 @@ import (
 )
 
 func (r *Redis) CheckSessionStatus(ctx context.Context, jti string) error {
-	fmt.Println(11111111)
 	result, err := r.client.HGet(ctx, jti, REVOKE).Result()
 	if err != nil {
 		if err == redis.Nil {
@@ -24,7 +22,6 @@ func (r *Redis) CheckSessionStatus(ctx context.Context, jti string) error {
 
 	status, err := strconv.ParseBool(result)
 	if err != nil {
-		fmt.Println(2222222)
 		r.logger.Info("session status not bool", zap.String("jti", jti))
 		return err
 	}
@@ -34,6 +31,5 @@ func (r *Redis) CheckSessionStatus(ctx context.Context, jti string) error {
 		return errors.New("session revoked")
 	}
 
-	fmt.Println(4444444, status)
 	return nil
 }
