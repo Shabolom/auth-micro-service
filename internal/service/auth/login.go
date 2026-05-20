@@ -2,7 +2,6 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
-	"auth-micro-service/internal/rabbitMQ"
 	"auth-micro-service/pkg/shortcut"
 	"auth-micro-service/pkg/utils"
 	"context"
@@ -10,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"go.uber.org/zap"
 )
 
@@ -90,7 +90,7 @@ func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Toke
 		publishCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 		defer cancel()
 
-		err := s.rabbitMQ.Publish(publishCtx, "login", rabbitMQ.TEXTTYPE, []byte(email))
+		err := s.rabbitMQ.Publish(publishCtx, "login", amqp.MimeTextPlain, []byte(email))
 		if err != nil {
 			s.logger.Info("Error publishing login", zap.Error(err))
 		}

@@ -2,7 +2,6 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
-	"auth-micro-service/internal/rabbitMQ"
 	"auth-micro-service/pkg/shortcut"
 	"auth-micro-service/pkg/utils"
 	"context"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/labstack/gommon/log"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"go.uber.org/zap"
 )
 
@@ -100,7 +100,7 @@ func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (d
 		publishCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 		defer cancel()
 
-		err := s.rabbitMQ.Publish(publishCtx, "register", rabbitMQ.TEXTTYPE, []byte(email))
+		err := s.rabbitMQ.Publish(publishCtx, "register", amqp.MimeTextPlain, []byte(email))
 		if err != nil {
 			log.Error("Error publishing email", zap.Error(err))
 		}
