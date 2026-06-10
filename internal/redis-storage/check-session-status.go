@@ -1,22 +1,22 @@
 package redisStorage
 
 import (
+	"auth-micro-service/pkg/shortcut"
 	"context"
 	"errors"
-	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
 
 func (r *Redis) CheckSessionStatus(ctx context.Context, jti string) error {
-	fmt.Println(11111111)
 	result, err := r.client.HGet(ctx, jti, REVOKE).Result()
 	if err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			r.logger.Info("session status not exist", zap.String("jti", jti))
-			return redis.Nil
+			return shortcut.ErrSessionNotFound
 		}
 
 		return err
@@ -24,7 +24,6 @@ func (r *Redis) CheckSessionStatus(ctx context.Context, jti string) error {
 
 	status, err := strconv.ParseBool(result)
 	if err != nil {
-		fmt.Println(2222222)
 		r.logger.Info("session status not bool", zap.String("jti", jti))
 		return err
 	}
@@ -34,6 +33,27 @@ func (r *Redis) CheckSessionStatus(ctx context.Context, jti string) error {
 		return errors.New("session revoked")
 	}
 
-	fmt.Println(4444444, status)
+	expiredUnixStr, err := r.client.HGet(ctx, jti, EXPIRE).Result()
+	if err != nil {
+		if errors.Is(err, redis.Nil) {
+			r.logger.Info("session status not exist", zap.String("jti", jti))
+			return redis.Nil
+		}
+
+		return err
+	}
+
+	expiredUnix, err := strconv.ParseInt(expiredUnixStr, 10, 64)
+	if err != nil {
+		r.logger.Info("session status not int", zap.String("jti", jti))
+		return err
+	}
+
+	expiredTime := time.Unix(expiredUnix, 0)
+	if time.Now().After(expiredTime) {
+		r.logger.Info("session status expired true", zap.String("jti", jti))
+		return shortcut.ErrSessionExpired
+	}
+
 	return nil
 }

@@ -10,7 +10,6 @@ import (
 
 func Error(err error) error {
 	switch {
-
 	case errors.Is(err, shortcut.ErrAccountNotFound):
 		return status.Error(codes.NotFound, err.Error())
 
@@ -25,6 +24,8 @@ func Error(err error) error {
 		errors.Is(err, shortcut.ErrInvalidTokenPair),
 		errors.Is(err, shortcut.ErrRefreshSessionNotFound),
 		errors.Is(err, shortcut.ErrRevokedSession),
+		errors.Is(err, shortcut.ErrSessionNotFound),
+		errors.Is(err, shortcut.ErrSessionExpired),
 		errors.Is(err, shortcut.ErrEmptyFields),
 		errors.Is(err, shortcut.ErrAgeLimit),
 		errors.Is(err, shortcut.ErrNoRows),

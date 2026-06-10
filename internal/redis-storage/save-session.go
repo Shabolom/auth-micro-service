@@ -12,7 +12,7 @@ func (r *Redis) SaveSession(ctx context.Context, key string, value *Session, exp
 
 	pipe.HSet(ctx, key, map[string]interface{}{
 		USERID: value.UserID,
-		EXPIRE: value.ExpiresAt,
+		EXPIRE: value.ExpiresAt.Unix(),
 		REVOKE: value.Revoked,
 	})
 
