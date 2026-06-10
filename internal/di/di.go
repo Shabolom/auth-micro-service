@@ -46,17 +46,6 @@ func (d *DI) GetInMemoryStorage() *inmemory.SessionStorage {
 	return d.inmemoryStorage
 }
 
-func (d *DI) GetRedis() *redisStorage.Redis {
-	if d.redis != nil {
-		return d.redis
-	}
-
-	redis := d.GetRedisHandlers()
-	d.redis = redis
-
-	return redis
-}
-
 func (d *DI) Config() *config.Config {
 	if d.config != nil {
 		return d.config

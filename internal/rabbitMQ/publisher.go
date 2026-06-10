@@ -1,4 +1,4 @@
-package rebbitMQ
+package rabbitMQ
 
 import (
 	"context"

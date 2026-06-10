@@ -2,6 +2,7 @@ package auth
 
 import (
 	"auth-micro-service/internal/dto"
+	"auth-micro-service/internal/rabbitMQ"
 	"auth-micro-service/pkg/shortcut"
 	"auth-micro-service/pkg/utils"
 	"context"
@@ -13,9 +14,16 @@ import (
 )
 
 func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Tokens, error) {
-	if login.Email == "" || login.Password == "" {
-		s.logger.Warn("login email or password is empty")
-		return &dto.Tokens{}, errors.New("email or password is empty")
+	err := s.logiValidate(login)
+	if err != nil {
+		s.logger.Info("Login session", zap.Error(err))
+		return &dto.Tokens{}, err
+	}
+
+	err = utils.ValidateEmail(login.Email)
+	if err != nil {
+		s.logger.Warn("login email is invalid", zap.String("email", login.Email))
+		return &dto.Tokens{}, err
 	}
 
 	account, err := s.authRepo.GetByEmail(ctx, login.Email)
@@ -82,7 +90,7 @@ func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Toke
 		publishCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 		defer cancel()
 
-		err := s.rabbitMQ.Publish(publishCtx, "login", shortcut.TEXTTYPE, []byte(email))
+		err := s.rabbitMQ.Publish(publishCtx, "login", rabbitMQ.TEXTTYPE, []byte(email))
 		if err != nil {
 			s.logger.Info("Error publishing login", zap.Error(err))
 		}
@@ -92,4 +100,18 @@ func (s *Service) Login(ctx context.Context, login *dto.LoginRequest) (*dto.Toke
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}, nil
+}
+
+func (s *Service) logiValidate(req *dto.LoginRequest) error {
+	if req.Email == "" || len(req.Password) < 5 {
+		return shortcut.ErrEmptyCredentials
+	}
+
+	err := utils.ValidateEmail(req.Email)
+	if err != nil {
+		s.logger.Info("login email is invalid", zap.String("email", req.Email))
+		return err
+	}
+
+	return nil
 }

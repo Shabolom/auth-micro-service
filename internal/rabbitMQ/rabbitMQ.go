@@ -1,4 +1,4 @@
-package rebbitMQ
+package rabbitMQ
 
 import (
 	"errors"
@@ -9,6 +9,11 @@ import (
 type Publisher struct {
 	ch *amqp.Channel
 }
+
+const (
+	TEXTTYPE string = "text/plain"
+	JSONTYPE string = "application/json"
+)
 
 func New(conn *amqp.Connection) (*Publisher, error) {
 	ch, err := conn.Channel()

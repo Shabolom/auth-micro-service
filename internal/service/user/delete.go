@@ -25,7 +25,6 @@ func (s *Service) DeleteUser(ctx context.Context, tokens *dto.Tokens) error {
 	}
 
 	err = s.userRepo.DeleteUser(ctx, accessTokenClaims.UserID)
-	fmt.Println(accessTokenClaims.UserID, 123123123)
 	if err != nil {
 		s.logger.Info("delete error")
 		return fmt.Errorf("DeleteUser: %w", err)
@@ -37,7 +36,6 @@ func (s *Service) DeleteUser(ctx context.Context, tokens *dto.Tokens) error {
 		return err
 	}
 
-	fmt.Println(jtiRefreshToken, 2222222222)
 	err = s.refreshTokenRepo.Logout(ctx, jtiRefreshToken)
 	if err != nil {
 		s.logger.Info("logout error", zap.Error(err))
