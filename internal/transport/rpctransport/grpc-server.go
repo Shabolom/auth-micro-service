@@ -1,6 +1,7 @@
 package rpctransport
 
 import (
+	"auth-micro-service/internal/transport/rpctransport/auth/check"
 	"auth-micro-service/internal/transport/rpctransport/auth/login_handler"
 	"auth-micro-service/internal/transport/rpctransport/auth/logout"
 	"auth-micro-service/internal/transport/rpctransport/auth/refresh_handler"
@@ -21,43 +22,38 @@ type (
 	GetUserHandler       = get.Handler
 	GetListUserHandler   = list.Handler
 	GetUpdateUserHandler = update.Handler
+	GetCheckHandler      = check.Handler
 )
 
-type AuthHandlers struct {
+type Handlers struct {
 	*GetLoginHandler
 	*GetLogoutHandler
 	*GetRefreshHandler
 	*GetRegisterHandler
-}
-
-func NewAuthHandlers(
-	loginHandler *GetLoginHandler,
-	logoutHandler *GetLogoutHandler,
-	refreshHandler *GetRefreshHandler,
-	registerHandler *GetRegisterHandler,
-) *AuthHandlers {
-	return &AuthHandlers{
-		GetLoginHandler:    loginHandler,
-		GetLogoutHandler:   logoutHandler,
-		GetRefreshHandler:  refreshHandler,
-		GetRegisterHandler: registerHandler,
-	}
-}
-
-type UsersHandlers struct {
+	*GetCheckHandler
 	*GetUserDeleteHandler
 	*GetUserHandler
 	*GetListUserHandler
 	*GetUpdateUserHandler
 }
 
-func NewUsersHandlers(
+func NewHandlers(
+	loginHandler *GetLoginHandler,
+	logoutHandler *GetLogoutHandler,
+	refreshHandler *GetRefreshHandler,
+	registerHandler *GetRegisterHandler,
+	getCheckHandler *GetCheckHandler,
 	getUserDeleteHandler *GetUserDeleteHandler,
 	getUserHandler *GetUserHandler,
 	getListUserHandler *GetListUserHandler,
 	getUpdateUserHandler *GetUpdateUserHandler,
-) *UsersHandlers {
-	return &UsersHandlers{
+) *Handlers {
+	return &Handlers{
+		GetLoginHandler:      loginHandler,
+		GetLogoutHandler:     logoutHandler,
+		GetRefreshHandler:    refreshHandler,
+		GetRegisterHandler:   registerHandler,
+		GetCheckHandler:      getCheckHandler,
 		GetUserDeleteHandler: getUserDeleteHandler,
 		GetUserHandler:       getUserHandler,
 		GetListUserHandler:   getListUserHandler,

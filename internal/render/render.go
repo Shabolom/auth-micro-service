@@ -20,18 +20,23 @@ func Error(err error) error {
 	case errors.Is(err, shortcut.ErrWrongPasswordOrEmail):
 		return status.Error(codes.Unauthenticated, err.Error())
 
+	case errors.Is(err, shortcut.ErrEmptyFields),
+		errors.Is(err, shortcut.ErrAgeLimit),
+		errors.Is(err, shortcut.ErrValidateEmail),
+		errors.Is(err, shortcut.ErrEmptyCredentials):
+		return status.Error(codes.InvalidArgument, err.Error())
+
 	case errors.Is(err, shortcut.ErrInvalidToken),
 		errors.Is(err, shortcut.ErrInvalidTokenPair),
 		errors.Is(err, shortcut.ErrRefreshSessionNotFound),
 		errors.Is(err, shortcut.ErrRevokedSession),
 		errors.Is(err, shortcut.ErrSessionNotFound),
 		errors.Is(err, shortcut.ErrSessionExpired),
-		errors.Is(err, shortcut.ErrEmptyFields),
-		errors.Is(err, shortcut.ErrAgeLimit),
-		errors.Is(err, shortcut.ErrNoRows),
-		errors.Is(err, shortcut.ErrValidateEmail),
-		errors.Is(err, shortcut.ErrEmptyCredentials):
+		errors.Is(err, shortcut.ErrSessionRevoked):
 		return status.Error(codes.Unauthenticated, err.Error())
+
+	case errors.Is(err, shortcut.ErrNoRows):
+		return status.Error(codes.NotFound, err.Error())
 
 	default:
 		return status.Error(codes.Internal, "internal server error")

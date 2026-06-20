@@ -4,21 +4,22 @@ import (
 	"context"
 
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/peer"
 )
 
 func IpUserAgentFromMetadata(ctx context.Context) (ip string, userAgent string) {
 	md, ok := metadata.FromIncomingContext(ctx)
-	if ok {
-		agents := md.Get("user-agent")
-		if len(agents) > 0 {
-			userAgent = agents[0]
-		}
+	if !ok {
+		return "", ""
 	}
 
-	p, ok := peer.FromContext(ctx)
-	if ok {
-		ip = p.Addr.String()
+	ips := md.Get("client-ip")
+	if len(ips) > 0 {
+		ip = ips[0]
+	}
+
+	agents := md.Get("user-agent")
+	if len(agents) > 0 {
+		userAgent = agents[0]
 	}
 
 	return ip, userAgent

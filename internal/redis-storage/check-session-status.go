@@ -30,7 +30,7 @@ func (r *Redis) CheckSessionStatus(ctx context.Context, jti string) error {
 
 	if status {
 		r.logger.Info("session status REVOKE true", zap.String("jti", jti))
-		return errors.New("session revoked")
+		return shortcut.ErrSessionRevoked
 	}
 
 	expiredUnixStr, err := r.client.HGet(ctx, jti, EXPIRE).Result()
