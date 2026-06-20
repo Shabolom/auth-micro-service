@@ -2,6 +2,7 @@ package di
 
 import (
 	"auth-micro-service/internal/transport/rpctransport"
+	"auth-micro-service/internal/transport/rpctransport/auth/check"
 	"auth-micro-service/internal/transport/rpctransport/auth/login_handler"
 	"auth-micro-service/internal/transport/rpctransport/auth/logout"
 	"auth-micro-service/internal/transport/rpctransport/auth/refresh_handler"
@@ -12,8 +13,13 @@ import (
 	user_update "auth-micro-service/internal/transport/rpctransport/user/update"
 )
 
-func (d *DI) GetGRPCUsersHandlers() *rpctransport.UsersHandlers {
-	return rpctransport.NewUsersHandlers(
+func (d *DI) GetGRPCHandlers() *rpctransport.Handlers {
+	return rpctransport.NewHandlers(
+		d.GetLoginHandler(),
+		d.GetLogoutHandler(),
+		d.GetRefreshHandler(),
+		d.GetRegisterHandler(),
+		d.GetCheckHandler(),
 		d.GetUserDeleteHandler(),
 		d.GetUserHandler(),
 		d.GetListUserHandler(),
@@ -37,13 +43,8 @@ func (d *DI) GetUpdateUserHandler() *user_update.Handler {
 	return user_update.New(d.GetUserService())
 }
 
-func (d *DI) GetGRPCAuthHandlers() *rpctransport.AuthHandlers {
-	return rpctransport.NewAuthHandlers(
-		d.GetLoginHandler(),
-		d.GetLogoutHandler(),
-		d.GetRefreshHandler(),
-		d.GetRegisterHandler(),
-	)
+func (d *DI) GetCheckHandler() *check.Handler {
+	return check.New(d.GetAuthService())
 }
 
 func (d *DI) GetLoginHandler() *login_handler.Handler {

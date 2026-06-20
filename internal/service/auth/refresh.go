@@ -35,8 +35,6 @@ func (s *Service) Refresh(ctx context.Context, oldRefToken string, userAgent str
 		return &dto.Tokens{}, err
 	}
 
-	now := time.Now()
-
 	newAccessJTI := uuid.New()
 	newAccessToken, err := utils.GenerateAccessToken(oldRefreshTokenClaims.UserID, s.secret, newAccessJTI.String())
 	if err != nil {
@@ -67,9 +65,9 @@ func (s *Service) Refresh(ctx context.Context, oldRefToken string, userAgent str
 		ID:        newRefreshJTI,
 		UserID:    userID,
 		TokenHash: newRefreshTokenHash,
-		ExpiresAt: now.Add(72 * time.Hour),
+		ExpiresAt: time.Now().Add(72 * time.Hour),
 		RevokedAt: nil,
-		CreatedAt: now,
+		CreatedAt: time.Now(),
 		UserAgent: userAgent,
 		IP:        ip,
 	}

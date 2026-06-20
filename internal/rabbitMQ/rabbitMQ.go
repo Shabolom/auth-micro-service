@@ -1,7 +1,7 @@
 package rabbitMQ
 
 import (
-	"errors"
+	"fmt"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -11,15 +11,14 @@ type Publisher struct {
 }
 
 const (
-	TEXTTYPE string = "text/plain"
-	JSONTYPE string = "application/json"
+	TEXTTYPE = "text/plain"
+	JSONTYPE = "application/json"
 )
 
 func New(conn *amqp.Connection) (*Publisher, error) {
 	ch, err := conn.Channel()
 	if err != nil {
-		_ = conn.Close()
-		return nil, errors.New("failed to open a channel")
+		return nil, fmt.Errorf("failed to open channel: %w", err)
 	}
 
 	err = ch.ExchangeDeclare(
@@ -31,69 +30,10 @@ func New(conn *amqp.Connection) (*Publisher, error) {
 		false,
 		nil,
 	)
-
 	if err != nil {
 		_ = ch.Close()
-		_ = conn.Close()
-		return nil, errors.New("failed to declare an exchange")
+		return nil, fmt.Errorf("failed to declare exchange auth.events: %w", err)
 	}
 
-	_, err = ch.QueueDeclare(
-		"auth.register",
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
-
-	if err != nil {
-		_ = ch.Close()
-		_ = conn.Close()
-		return nil, errors.New("failed to declare a queue")
-	}
-
-	_, err = ch.QueueDeclare(
-		"auth.login.logs",
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if err != nil {
-		_ = ch.Close()
-		_ = conn.Close()
-		return nil, errors.New("failed to declare a queue")
-	}
-
-	err = ch.QueueBind(
-		"auth.register",
-		"register",
-		"auth.events",
-		false,
-		nil,
-	)
-	if err != nil {
-		_ = ch.Close()
-		_ = conn.Close()
-		return nil, errors.New("failed to bind a queue")
-	}
-
-	err = ch.QueueBind(
-		"auth.login.logs",
-		"login",
-		"auth.events",
-		false,
-		nil,
-	)
-	if err != nil {
-		_ = ch.Close()
-		_ = conn.Close()
-		return nil, errors.New("failed to bind a queue")
-	}
-
-	return &Publisher{
-		ch: ch,
-	}, nil
+	return &Publisher{ch: ch}, nil
 }

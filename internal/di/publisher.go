@@ -2,14 +2,15 @@ package di
 
 import (
 	"auth-micro-service/internal/rabbitMQ"
-	"fmt"
+
+	"go.uber.org/zap"
 )
 
 func (d *DI) GetPublisher() *rabbitMQ.Publisher {
 	publisher, err := rabbitMQ.New(d.GetRmq())
 
 	if err != nil {
-		d.logger.Error(fmt.Sprintf("failed to get publisher %v", err))
+		d.logger.Fatal("failed to get publisher", zap.Error(err))
 	}
 
 	return publisher

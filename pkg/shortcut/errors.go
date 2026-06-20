@@ -15,5 +15,8 @@ var (
 	ErrAgeLimit                     = errors.New("age is too young")
 	ErrEmptyCredentials             = errors.New("credentials is empty")
 	ErrNoRows                       = errors.New("the record was not found")
+	ErrSessionNotFound              = errors.New("session not found")
+	ErrSessionRevoked               = errors.New("session revoked")
+	ErrSessionExpired               = errors.New("session expired")
 	ErrValidateEmail                = errors.New("the email is invalid")
 )

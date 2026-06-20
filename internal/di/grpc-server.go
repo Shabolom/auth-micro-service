@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -17,13 +16,12 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (d *DI) NewAuthGRPCServer(logger *zap.Logger, authHandlers authv1.AuthServiceServer, usersHandlers authv1.UserServiceServer) *grpc.Server {
+func (d *DI) NewAuthGRPCServer(logger *zap.Logger, handlers authv1.AccountServiceServer) *grpc.Server {
 	grpcServer := grpc.NewServer(
 		grpc.UnaryInterceptor(d.loggingInterceptor(logger)),
 	)
 
-	authv1.RegisterAuthServiceServer(grpcServer, authHandlers)
-	authv1.RegisterUserServiceServer(grpcServer, usersHandlers)
+	authv1.RegisterAccountServiceServer(grpcServer, handlers)
 
 	reflection.Register(grpcServer)
 
@@ -42,11 +40,13 @@ func (d *DI) loggingInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor 
 		start := time.Now()
 
 		switch info.FullMethod {
-		case authv1.AuthService_Register_FullMethodName,
-			authv1.AuthService_Refresh_FullMethodName,
-			authv1.AuthService_Login_FullMethodName:
+		case authv1.AccountService_Register_FullMethodName,
+			authv1.AccountService_Refresh_FullMethodName,
+			authv1.AccountService_Check_FullMethodName,
+			authv1.AccountService_Login_FullMethodName:
 			return handler(ctx, req)
 		}
+		d.Logger().Info("Start middleware", zap.String("method", info.FullMethod))
 
 		md, ok := metadata.FromIncomingContext(ctx)
 		if !ok {
@@ -65,12 +65,15 @@ func (d *DI) loggingInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor 
 
 		claims, err := utils.ParseToken(token, d.Config().Secret, d.Logger())
 		if err != nil {
-			logger.Info("failed to parse token", zap.String("token", token), zap.Error(err))
+			logger.Info("failed to parse token",
+				zap.String("token", token),
+				zap.Error(err),
+			)
 			return nil, status.Error(codes.Unauthenticated, err.Error())
 		}
 
 		err = d.GetRedisHandlers().CheckSessionStatus(d.ctx, claims.ID)
-		if err == redis.Nil || err != nil {
+		if err != nil {
 			d.Logger().Info("check error :", zap.String("id", claims.ID), zap.Error(err))
 			return nil, status.Error(codes.Unauthenticated, errors.New("user is not authorized").Error())
 		}

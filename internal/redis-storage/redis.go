@@ -1,6 +1,8 @@
 package redisStorage
 
 import (
+	"errors"
+
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
@@ -25,7 +27,7 @@ func NewRedisPublisher(client *redis.Client, logger *zap.Logger) *Redis {
 
 func (r *Redis) Close() error {
 	if r.client == nil {
-		return nil
+		return errors.New("already closed")
 	}
 
 	return r.client.Close()
