@@ -20,14 +20,14 @@ func (s *Service) Check(ctx context.Context, tokens *dto.Tokens, userAgent strin
 
 	refTokenClaims, err := utils.ParseTokenForCheck(tokens.RefreshToken, s.secret, s.logger)
 	if err != nil {
-		s.logger.Warn("refresh token parse failed",
-			zap.Error(err),
-		)
-
 		if !errors.Is(err, shortcut.ErrInvalidToken) {
 			s.logger.Warn("refresh token is invalid")
 			return nil, shortcut.ErrInvalidToken
 		}
+
+		s.logger.Warn("refresh token parse failed",
+			zap.Error(err),
+		)
 	}
 
 	s.logger.Info("refresh token parsed",
@@ -37,14 +37,14 @@ func (s *Service) Check(ctx context.Context, tokens *dto.Tokens, userAgent strin
 
 	accessTokenClaims, err := utils.ParseTokenForCheck(tokens.AccessToken, s.secret, s.logger)
 	if err != nil {
-		s.logger.Warn("access token parse failed",
-			zap.Error(err),
-		)
-
 		if !errors.Is(err, shortcut.ErrInvalidToken) {
 			s.logger.Warn("access token is invalid")
 			return nil, shortcut.ErrInvalidToken
 		}
+
+		s.logger.Warn("access token parse failed",
+			zap.Error(err),
+		)
 	}
 
 	s.logger.Info("access token parsed",
@@ -86,7 +86,7 @@ func (s *Service) Check(ctx context.Context, tokens *dto.Tokens, userAgent strin
 				userAgent,
 			)
 			if err != nil {
-				s.logger.Error("failed to get active refresh token",
+				s.logger.Warn("failed to get active refresh token",
 					zap.String("refresh_jti", refTokenClaims.ID),
 					zap.String("user_id", refTokenClaims.UserID),
 					zap.Error(err),
