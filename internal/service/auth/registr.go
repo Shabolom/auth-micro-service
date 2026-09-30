@@ -16,8 +16,6 @@ import (
 
 const refreshTokenTTL = 72 * time.Hour
 
-var now = time.Now()
-
 func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (dto.Tokens, error) {
 	err := s.requestValidate(request)
 	if err != nil {
@@ -39,8 +37,8 @@ func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (d
 		PasswordHash: hashPassword,
 		Name:         request.Name,
 		Age:          request.Age,
-		CreatedAt:    now,
-		UpdatedAt:    now,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
 	}
 
 	if err = s.authRepo.Register(ctx, register); err != nil {
@@ -77,9 +75,9 @@ func (s *Service) Register(ctx context.Context, request *dto.RegisterRequest) (d
 		ID:        refreshTokenJTI,
 		UserID:    userID,
 		TokenHash: hashToken,
-		ExpiresAt: now.Add(refreshTokenTTL),
+		ExpiresAt: time.Now().Add(refreshTokenTTL),
 		RevokedAt: nil,
-		CreatedAt: now,
+		CreatedAt: time.Now(),
 		UserAgent: request.UserAgent,
 		IP:        request.IP,
 	}

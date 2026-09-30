@@ -13,7 +13,7 @@ func AccessTokenFromMetadata(ctx context.Context) (string, error) {
 	if !ok {
 		return "", errors.New("metadata not found")
 	}
-	
+
 	authHeaders := md.Get("authorization")
 	if len(authHeaders) == 0 {
 		return "", errors.New("authorization header not found")
@@ -31,7 +31,7 @@ func RefreshTokenFromMetadata(ctx context.Context) (string, error) {
 
 	authHeaders := md.Get("refresh-token")
 	if len(authHeaders) == 0 {
-		return "", errors.New("authorization header not found")
+		return "", errors.New("refresh-token header not found")
 	}
 	token := authHeaders[0]
 

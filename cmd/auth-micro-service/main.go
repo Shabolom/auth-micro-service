@@ -27,8 +27,7 @@ func main() {
 
 	grpcServer := container.NewAuthGRPCServer(
 		container.Logger(),
-		container.GetGRPCAuthHandlers(),
-		container.GetGRPCUsersHandlers(),
+		container.GetGRPCHandlers(),
 	)
 
 	go func() {

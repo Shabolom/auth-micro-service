@@ -6,12 +6,46 @@ option go_package = "gen/auth/v1;authv1";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
-// AuthService
-service AuthService {
+service AccountService {
   rpc Register(RegisterRequest) returns (RegisterReply) {}
   rpc Login(LoginRequest) returns (LoginReply) {}
   rpc Logout(google.protobuf.Empty) returns (LogoutReply) {}
   rpc Refresh(google.protobuf.Empty) returns (RefreshReply) {}
+  rpc Check(google.protobuf.Empty) returns (CheckReply) {}
+
+  rpc GetUsersList(google.protobuf.Empty) returns (GetUsersReply) {}
+  rpc GetUser(google.protobuf.Empty) returns (GetUserReply) {}
+  rpc DeleteUsers(google.protobuf.Empty) returns (DeleteUsersReply) {}
+  rpc UpdateUsers(UpdateUsersRequest) returns (UpdateUsersReply) {}
+}
+
+message CheckReply {
+  enum ERR_INFO_REASON {
+    UNSPECIFIED = 0;
+    VALIDATION_ERROR = 1;
+    INVALID_REQUEST = 2;
+
+    STATUS_OK = 3;
+
+    ACCESS_TOKEN_EXPIRED = 4;
+    REFRESH_TOKEN_EXPIRED = 5;
+
+    ACCESS_TOKEN_NOT_FOUND = 6;
+    REFRESH_TOKEN_NOT_FOUND = 7;
+
+    TOKEN_PAIR_MISMATCH = 8;
+
+    ACCESS_TOKEN_REVOKED = 9;
+    REFRESH_TOKEN_REVOKED = 10;
+
+    INVALID_ACCESS_TOKEN = 11;
+    INVALID_REFRESH_TOKEN = 12;
+
+    SESSION_NOT_FOUND = 13;
+  }
+
+  ERR_INFO_REASON err_info_reason = 1;
+  string message = 2;
 }
 
 message RegisterRequest {
@@ -28,6 +62,7 @@ message RegisterReply {
     INVALID_REQUEST = 2;
     STATUS_OK = 3;
   }
+
   ERR_INFO_REASON err_info_reason = 1;
   string message = 2;
 }
@@ -44,6 +79,7 @@ message LoginReply {
     INVALID_REQUEST = 2;
     STATUS_OK = 3;
   }
+
   ERR_INFO_REASON err_info_reason = 1;
   string message = 2;
 }
@@ -55,6 +91,7 @@ message LogoutReply {
     INVALID_REQUEST = 2;
     STATUS_OK = 3;
   }
+
   ERR_INFO_REASON err_info_reason = 1;
   string message = 2;
 }
@@ -66,15 +103,9 @@ message RefreshReply {
     INVALID_REQUEST = 2;
     STATUS_OK = 3;
   }
+
   ERR_INFO_REASON err_info_reason = 1;
   string message = 2;
-}
-
-service UserService {
-  rpc GetUsersList(google.protobuf.Empty) returns (GetUsersReply) {}
-  rpc GetUser(google.protobuf.Empty) returns (GetUserReply) {}
-  rpc DeleteUsers(google.protobuf.Empty) returns (DeleteUsersReply) {}
-  rpc UpdateUsers(UpdateUsersRequest) returns (UpdateUsersReply) {}
 }
 
 message GetUsersReply {
@@ -84,6 +115,7 @@ message GetUsersReply {
     INVALID_REQUEST = 2;
     STATUS_OK = 3;
   }
+
   ERR_INFO_REASON err_info_reason = 1;
   repeated User users = 2;
 }
@@ -104,10 +136,10 @@ message GetUserReply {
     INVALID_REQUEST = 2;
     STATUS_OK = 3;
   }
+
   ERR_INFO_REASON err_info_reason = 1;
   User user = 2;
 }
-
 
 message DeleteUsersReply {
   enum ERR_INFO_REASON {
@@ -116,19 +148,20 @@ message DeleteUsersReply {
     INVALID_REQUEST = 2;
     STATUS_OK = 3;
   }
+
   ERR_INFO_REASON err_info_reason = 1;
   User user = 2;
   string message = 3;
 }
 
 message UpdateUsersRequest {
-  UpdateUser updatedUser = 2;
+  UpdateUser updatedUser = 1;
 }
 
 message UpdateUser {
-  string mail = 2;
-  string name = 3;
-  uint32 age = 4;
+  string mail = 1;
+  string name = 2;
+  uint32 age = 3;
 }
 
 message UpdateUsersReply {
@@ -138,8 +171,8 @@ message UpdateUsersReply {
     INVALID_REQUEST = 2;
     STATUS_OK = 3;
   }
+
   ERR_INFO_REASON err_info_reason = 1;
   User user = 2;
   string message = 3;
 }
-

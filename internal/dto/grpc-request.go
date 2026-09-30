@@ -15,15 +15,3 @@ type LoginRequest struct {
 	IP        string
 	UserAgent string
 }
-
-type CreateUserDescriptionRequest struct {
-	Name string
-	Age  int
-}
-
-type UpdateUsersRequest struct {
-	Id   string
-	Mail string
-	Name string
-	Age  int32
-}

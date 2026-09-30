@@ -44,21 +44,17 @@ func (s *Service) UpdateRefreshToken(ctx context.Context, oldTokens *dto.Tokens,
 		}
 	}
 
-	if refreshTokenHash != "" {
-		err = utils.Compare(refreshTokenHash, oldTokens.RefreshToken)
-		if err != nil {
-			s.logger.Info("Compare refresh token", zap.Error(err))
-			return dto.Tokens{}, err
-		}
+	err = utils.Compare(refreshTokenHash, oldTokens.RefreshToken)
+	if err != nil {
+		s.logger.Info("Compare refresh token", zap.Error(err))
+		return dto.Tokens{}, err
 	}
 
-	oldJTIUUID, err := uuid.Parse(oldRefreshTokenClaims.ID)
+	oldJtiUUID, err := uuid.Parse(oldRefreshTokenClaims.ID)
 	if err != nil {
 		s.logger.Info("Parse old jti", zap.Error(err))
 		return dto.Tokens{}, err
 	}
-
-	now := time.Now()
 
 	newAccessJTI := uuid.New()
 	accessToken, err := utils.GenerateAccessToken(userID.String(), s.secret, newAccessJTI.String())
@@ -84,14 +80,14 @@ func (s *Service) UpdateRefreshToken(ctx context.Context, oldTokens *dto.Tokens,
 		ID:        newRefreshJTI,
 		UserID:    userID,
 		TokenHash: newRefreshTokenHash,
-		ExpiresAt: now.Add(72 * time.Hour),
+		ExpiresAt: time.Now().Add(72 * time.Hour),
 		RevokedAt: nil,
-		CreatedAt: now,
+		CreatedAt: time.Now(),
 		UserAgent: userAgent,
 		IP:        ip,
 	}
 
-	err = s.authRepo.UpdateRefreshTokenByID(ctx, oldJTIUUID, storageRefreshToken)
+	err = s.authRepo.UpdateRefreshTokenByID(ctx, oldJtiUUID, storageRefreshToken)
 	if err != nil {
 		s.logger.Info("Update refresh token by id", zap.Error(err))
 		return dto.Tokens{}, err

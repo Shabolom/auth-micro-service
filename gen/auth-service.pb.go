@@ -23,6 +23,88 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type CheckReply_ERR_INFO_REASON int32
+
+const (
+	CheckReply_UNSPECIFIED             CheckReply_ERR_INFO_REASON = 0
+	CheckReply_VALIDATION_ERROR        CheckReply_ERR_INFO_REASON = 1
+	CheckReply_INVALID_REQUEST         CheckReply_ERR_INFO_REASON = 2
+	CheckReply_STATUS_OK               CheckReply_ERR_INFO_REASON = 3
+	CheckReply_ACCESS_TOKEN_EXPIRED    CheckReply_ERR_INFO_REASON = 4
+	CheckReply_REFRESH_TOKEN_EXPIRED   CheckReply_ERR_INFO_REASON = 5
+	CheckReply_ACCESS_TOKEN_NOT_FOUND  CheckReply_ERR_INFO_REASON = 6
+	CheckReply_REFRESH_TOKEN_NOT_FOUND CheckReply_ERR_INFO_REASON = 7
+	CheckReply_TOKEN_PAIR_MISMATCH     CheckReply_ERR_INFO_REASON = 8
+	CheckReply_ACCESS_TOKEN_REVOKED    CheckReply_ERR_INFO_REASON = 9
+	CheckReply_REFRESH_TOKEN_REVOKED   CheckReply_ERR_INFO_REASON = 10
+	CheckReply_INVALID_ACCESS_TOKEN    CheckReply_ERR_INFO_REASON = 11
+	CheckReply_INVALID_REFRESH_TOKEN   CheckReply_ERR_INFO_REASON = 12
+	CheckReply_SESSION_NOT_FOUND       CheckReply_ERR_INFO_REASON = 13
+)
+
+// Enum value maps for CheckReply_ERR_INFO_REASON.
+var (
+	CheckReply_ERR_INFO_REASON_name = map[int32]string{
+		0:  "UNSPECIFIED",
+		1:  "VALIDATION_ERROR",
+		2:  "INVALID_REQUEST",
+		3:  "STATUS_OK",
+		4:  "ACCESS_TOKEN_EXPIRED",
+		5:  "REFRESH_TOKEN_EXPIRED",
+		6:  "ACCESS_TOKEN_NOT_FOUND",
+		7:  "REFRESH_TOKEN_NOT_FOUND",
+		8:  "TOKEN_PAIR_MISMATCH",
+		9:  "ACCESS_TOKEN_REVOKED",
+		10: "REFRESH_TOKEN_REVOKED",
+		11: "INVALID_ACCESS_TOKEN",
+		12: "INVALID_REFRESH_TOKEN",
+		13: "SESSION_NOT_FOUND",
+	}
+	CheckReply_ERR_INFO_REASON_value = map[string]int32{
+		"UNSPECIFIED":             0,
+		"VALIDATION_ERROR":        1,
+		"INVALID_REQUEST":         2,
+		"STATUS_OK":               3,
+		"ACCESS_TOKEN_EXPIRED":    4,
+		"REFRESH_TOKEN_EXPIRED":   5,
+		"ACCESS_TOKEN_NOT_FOUND":  6,
+		"REFRESH_TOKEN_NOT_FOUND": 7,
+		"TOKEN_PAIR_MISMATCH":     8,
+		"ACCESS_TOKEN_REVOKED":    9,
+		"REFRESH_TOKEN_REVOKED":   10,
+		"INVALID_ACCESS_TOKEN":    11,
+		"INVALID_REFRESH_TOKEN":   12,
+		"SESSION_NOT_FOUND":       13,
+	}
+)
+
+func (x CheckReply_ERR_INFO_REASON) Enum() *CheckReply_ERR_INFO_REASON {
+	p := new(CheckReply_ERR_INFO_REASON)
+	*p = x
+	return p
+}
+
+func (x CheckReply_ERR_INFO_REASON) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CheckReply_ERR_INFO_REASON) Descriptor() protoreflect.EnumDescriptor {
+	return file_auth_service_proto_enumTypes[0].Descriptor()
+}
+
+func (CheckReply_ERR_INFO_REASON) Type() protoreflect.EnumType {
+	return &file_auth_service_proto_enumTypes[0]
+}
+
+func (x CheckReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CheckReply_ERR_INFO_REASON.Descriptor instead.
+func (CheckReply_ERR_INFO_REASON) EnumDescriptor() ([]byte, []int) {
+	return file_auth_service_proto_rawDescGZIP(), []int{0, 0}
+}
+
 type RegisterReply_ERR_INFO_REASON int32
 
 const (
@@ -59,11 +141,11 @@ func (x RegisterReply_ERR_INFO_REASON) String() string {
 }
 
 func (RegisterReply_ERR_INFO_REASON) Descriptor() protoreflect.EnumDescriptor {
-	return file_auth_service_proto_enumTypes[0].Descriptor()
+	return file_auth_service_proto_enumTypes[1].Descriptor()
 }
 
 func (RegisterReply_ERR_INFO_REASON) Type() protoreflect.EnumType {
-	return &file_auth_service_proto_enumTypes[0]
+	return &file_auth_service_proto_enumTypes[1]
 }
 
 func (x RegisterReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
@@ -72,7 +154,7 @@ func (x RegisterReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use RegisterReply_ERR_INFO_REASON.Descriptor instead.
 func (RegisterReply_ERR_INFO_REASON) EnumDescriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{1, 0}
+	return file_auth_service_proto_rawDescGZIP(), []int{2, 0}
 }
 
 type LoginReply_ERR_INFO_REASON int32
@@ -111,11 +193,11 @@ func (x LoginReply_ERR_INFO_REASON) String() string {
 }
 
 func (LoginReply_ERR_INFO_REASON) Descriptor() protoreflect.EnumDescriptor {
-	return file_auth_service_proto_enumTypes[1].Descriptor()
+	return file_auth_service_proto_enumTypes[2].Descriptor()
 }
 
 func (LoginReply_ERR_INFO_REASON) Type() protoreflect.EnumType {
-	return &file_auth_service_proto_enumTypes[1]
+	return &file_auth_service_proto_enumTypes[2]
 }
 
 func (x LoginReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
@@ -124,7 +206,7 @@ func (x LoginReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use LoginReply_ERR_INFO_REASON.Descriptor instead.
 func (LoginReply_ERR_INFO_REASON) EnumDescriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{3, 0}
+	return file_auth_service_proto_rawDescGZIP(), []int{4, 0}
 }
 
 type LogoutReply_ERR_INFO_REASON int32
@@ -163,11 +245,11 @@ func (x LogoutReply_ERR_INFO_REASON) String() string {
 }
 
 func (LogoutReply_ERR_INFO_REASON) Descriptor() protoreflect.EnumDescriptor {
-	return file_auth_service_proto_enumTypes[2].Descriptor()
+	return file_auth_service_proto_enumTypes[3].Descriptor()
 }
 
 func (LogoutReply_ERR_INFO_REASON) Type() protoreflect.EnumType {
-	return &file_auth_service_proto_enumTypes[2]
+	return &file_auth_service_proto_enumTypes[3]
 }
 
 func (x LogoutReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
@@ -176,7 +258,7 @@ func (x LogoutReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use LogoutReply_ERR_INFO_REASON.Descriptor instead.
 func (LogoutReply_ERR_INFO_REASON) EnumDescriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{4, 0}
+	return file_auth_service_proto_rawDescGZIP(), []int{5, 0}
 }
 
 type RefreshReply_ERR_INFO_REASON int32
@@ -215,11 +297,11 @@ func (x RefreshReply_ERR_INFO_REASON) String() string {
 }
 
 func (RefreshReply_ERR_INFO_REASON) Descriptor() protoreflect.EnumDescriptor {
-	return file_auth_service_proto_enumTypes[3].Descriptor()
+	return file_auth_service_proto_enumTypes[4].Descriptor()
 }
 
 func (RefreshReply_ERR_INFO_REASON) Type() protoreflect.EnumType {
-	return &file_auth_service_proto_enumTypes[3]
+	return &file_auth_service_proto_enumTypes[4]
 }
 
 func (x RefreshReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
@@ -228,7 +310,7 @@ func (x RefreshReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use RefreshReply_ERR_INFO_REASON.Descriptor instead.
 func (RefreshReply_ERR_INFO_REASON) EnumDescriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{5, 0}
+	return file_auth_service_proto_rawDescGZIP(), []int{6, 0}
 }
 
 type GetUsersReply_ERR_INFO_REASON int32
@@ -267,11 +349,11 @@ func (x GetUsersReply_ERR_INFO_REASON) String() string {
 }
 
 func (GetUsersReply_ERR_INFO_REASON) Descriptor() protoreflect.EnumDescriptor {
-	return file_auth_service_proto_enumTypes[4].Descriptor()
+	return file_auth_service_proto_enumTypes[5].Descriptor()
 }
 
 func (GetUsersReply_ERR_INFO_REASON) Type() protoreflect.EnumType {
-	return &file_auth_service_proto_enumTypes[4]
+	return &file_auth_service_proto_enumTypes[5]
 }
 
 func (x GetUsersReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
@@ -280,7 +362,7 @@ func (x GetUsersReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use GetUsersReply_ERR_INFO_REASON.Descriptor instead.
 func (GetUsersReply_ERR_INFO_REASON) EnumDescriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{6, 0}
+	return file_auth_service_proto_rawDescGZIP(), []int{7, 0}
 }
 
 type GetUserReply_ERR_INFO_REASON int32
@@ -319,11 +401,11 @@ func (x GetUserReply_ERR_INFO_REASON) String() string {
 }
 
 func (GetUserReply_ERR_INFO_REASON) Descriptor() protoreflect.EnumDescriptor {
-	return file_auth_service_proto_enumTypes[5].Descriptor()
+	return file_auth_service_proto_enumTypes[6].Descriptor()
 }
 
 func (GetUserReply_ERR_INFO_REASON) Type() protoreflect.EnumType {
-	return &file_auth_service_proto_enumTypes[5]
+	return &file_auth_service_proto_enumTypes[6]
 }
 
 func (x GetUserReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
@@ -332,7 +414,7 @@ func (x GetUserReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use GetUserReply_ERR_INFO_REASON.Descriptor instead.
 func (GetUserReply_ERR_INFO_REASON) EnumDescriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{8, 0}
+	return file_auth_service_proto_rawDescGZIP(), []int{9, 0}
 }
 
 type DeleteUsersReply_ERR_INFO_REASON int32
@@ -371,11 +453,11 @@ func (x DeleteUsersReply_ERR_INFO_REASON) String() string {
 }
 
 func (DeleteUsersReply_ERR_INFO_REASON) Descriptor() protoreflect.EnumDescriptor {
-	return file_auth_service_proto_enumTypes[6].Descriptor()
+	return file_auth_service_proto_enumTypes[7].Descriptor()
 }
 
 func (DeleteUsersReply_ERR_INFO_REASON) Type() protoreflect.EnumType {
-	return &file_auth_service_proto_enumTypes[6]
+	return &file_auth_service_proto_enumTypes[7]
 }
 
 func (x DeleteUsersReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
@@ -384,7 +466,7 @@ func (x DeleteUsersReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use DeleteUsersReply_ERR_INFO_REASON.Descriptor instead.
 func (DeleteUsersReply_ERR_INFO_REASON) EnumDescriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{9, 0}
+	return file_auth_service_proto_rawDescGZIP(), []int{10, 0}
 }
 
 type UpdateUsersReply_ERR_INFO_REASON int32
@@ -423,11 +505,11 @@ func (x UpdateUsersReply_ERR_INFO_REASON) String() string {
 }
 
 func (UpdateUsersReply_ERR_INFO_REASON) Descriptor() protoreflect.EnumDescriptor {
-	return file_auth_service_proto_enumTypes[7].Descriptor()
+	return file_auth_service_proto_enumTypes[8].Descriptor()
 }
 
 func (UpdateUsersReply_ERR_INFO_REASON) Type() protoreflect.EnumType {
-	return &file_auth_service_proto_enumTypes[7]
+	return &file_auth_service_proto_enumTypes[8]
 }
 
 func (x UpdateUsersReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
@@ -436,7 +518,59 @@ func (x UpdateUsersReply_ERR_INFO_REASON) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use UpdateUsersReply_ERR_INFO_REASON.Descriptor instead.
 func (UpdateUsersReply_ERR_INFO_REASON) EnumDescriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{12, 0}
+	return file_auth_service_proto_rawDescGZIP(), []int{13, 0}
+}
+
+type CheckReply struct {
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	ErrInfoReason CheckReply_ERR_INFO_REASON `protobuf:"varint,1,opt,name=err_info_reason,json=errInfoReason,proto3,enum=platform.mvp.CheckReply_ERR_INFO_REASON" json:"err_info_reason,omitempty"`
+	Message       string                     `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CheckReply) Reset() {
+	*x = CheckReply{}
+	mi := &file_auth_service_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CheckReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckReply) ProtoMessage() {}
+
+func (x *CheckReply) ProtoReflect() protoreflect.Message {
+	mi := &file_auth_service_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckReply.ProtoReflect.Descriptor instead.
+func (*CheckReply) Descriptor() ([]byte, []int) {
+	return file_auth_service_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *CheckReply) GetErrInfoReason() CheckReply_ERR_INFO_REASON {
+	if x != nil {
+		return x.ErrInfoReason
+	}
+	return CheckReply_UNSPECIFIED
+}
+
+func (x *CheckReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
 }
 
 type RegisterRequest struct {
@@ -451,7 +585,7 @@ type RegisterRequest struct {
 
 func (x *RegisterRequest) Reset() {
 	*x = RegisterRequest{}
-	mi := &file_auth_service_proto_msgTypes[0]
+	mi := &file_auth_service_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -463,7 +597,7 @@ func (x *RegisterRequest) String() string {
 func (*RegisterRequest) ProtoMessage() {}
 
 func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[0]
+	mi := &file_auth_service_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -476,7 +610,7 @@ func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
 func (*RegisterRequest) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{0}
+	return file_auth_service_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *RegisterRequest) GetMail() string {
@@ -517,7 +651,7 @@ type RegisterReply struct {
 
 func (x *RegisterReply) Reset() {
 	*x = RegisterReply{}
-	mi := &file_auth_service_proto_msgTypes[1]
+	mi := &file_auth_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -529,7 +663,7 @@ func (x *RegisterReply) String() string {
 func (*RegisterReply) ProtoMessage() {}
 
 func (x *RegisterReply) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[1]
+	mi := &file_auth_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -542,7 +676,7 @@ func (x *RegisterReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterReply.ProtoReflect.Descriptor instead.
 func (*RegisterReply) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{1}
+	return file_auth_service_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *RegisterReply) GetErrInfoReason() RegisterReply_ERR_INFO_REASON {
@@ -569,7 +703,7 @@ type LoginRequest struct {
 
 func (x *LoginRequest) Reset() {
 	*x = LoginRequest{}
-	mi := &file_auth_service_proto_msgTypes[2]
+	mi := &file_auth_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -581,7 +715,7 @@ func (x *LoginRequest) String() string {
 func (*LoginRequest) ProtoMessage() {}
 
 func (x *LoginRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[2]
+	mi := &file_auth_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -594,7 +728,7 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
 func (*LoginRequest) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{2}
+	return file_auth_service_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *LoginRequest) GetMail() string {
@@ -621,7 +755,7 @@ type LoginReply struct {
 
 func (x *LoginReply) Reset() {
 	*x = LoginReply{}
-	mi := &file_auth_service_proto_msgTypes[3]
+	mi := &file_auth_service_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -633,7 +767,7 @@ func (x *LoginReply) String() string {
 func (*LoginReply) ProtoMessage() {}
 
 func (x *LoginReply) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[3]
+	mi := &file_auth_service_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -646,7 +780,7 @@ func (x *LoginReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginReply.ProtoReflect.Descriptor instead.
 func (*LoginReply) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{3}
+	return file_auth_service_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *LoginReply) GetErrInfoReason() LoginReply_ERR_INFO_REASON {
@@ -673,7 +807,7 @@ type LogoutReply struct {
 
 func (x *LogoutReply) Reset() {
 	*x = LogoutReply{}
-	mi := &file_auth_service_proto_msgTypes[4]
+	mi := &file_auth_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -685,7 +819,7 @@ func (x *LogoutReply) String() string {
 func (*LogoutReply) ProtoMessage() {}
 
 func (x *LogoutReply) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[4]
+	mi := &file_auth_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -698,7 +832,7 @@ func (x *LogoutReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutReply.ProtoReflect.Descriptor instead.
 func (*LogoutReply) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{4}
+	return file_auth_service_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *LogoutReply) GetErrInfoReason() LogoutReply_ERR_INFO_REASON {
@@ -725,7 +859,7 @@ type RefreshReply struct {
 
 func (x *RefreshReply) Reset() {
 	*x = RefreshReply{}
-	mi := &file_auth_service_proto_msgTypes[5]
+	mi := &file_auth_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -737,7 +871,7 @@ func (x *RefreshReply) String() string {
 func (*RefreshReply) ProtoMessage() {}
 
 func (x *RefreshReply) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[5]
+	mi := &file_auth_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -750,7 +884,7 @@ func (x *RefreshReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefreshReply.ProtoReflect.Descriptor instead.
 func (*RefreshReply) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{5}
+	return file_auth_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *RefreshReply) GetErrInfoReason() RefreshReply_ERR_INFO_REASON {
@@ -777,7 +911,7 @@ type GetUsersReply struct {
 
 func (x *GetUsersReply) Reset() {
 	*x = GetUsersReply{}
-	mi := &file_auth_service_proto_msgTypes[6]
+	mi := &file_auth_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -789,7 +923,7 @@ func (x *GetUsersReply) String() string {
 func (*GetUsersReply) ProtoMessage() {}
 
 func (x *GetUsersReply) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[6]
+	mi := &file_auth_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -802,7 +936,7 @@ func (x *GetUsersReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUsersReply.ProtoReflect.Descriptor instead.
 func (*GetUsersReply) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{6}
+	return file_auth_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetUsersReply) GetErrInfoReason() GetUsersReply_ERR_INFO_REASON {
@@ -833,7 +967,7 @@ type User struct {
 
 func (x *User) Reset() {
 	*x = User{}
-	mi := &file_auth_service_proto_msgTypes[7]
+	mi := &file_auth_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -845,7 +979,7 @@ func (x *User) String() string {
 func (*User) ProtoMessage() {}
 
 func (x *User) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[7]
+	mi := &file_auth_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -858,7 +992,7 @@ func (x *User) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use User.ProtoReflect.Descriptor instead.
 func (*User) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{7}
+	return file_auth_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *User) GetId() string {
@@ -913,7 +1047,7 @@ type GetUserReply struct {
 
 func (x *GetUserReply) Reset() {
 	*x = GetUserReply{}
-	mi := &file_auth_service_proto_msgTypes[8]
+	mi := &file_auth_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -925,7 +1059,7 @@ func (x *GetUserReply) String() string {
 func (*GetUserReply) ProtoMessage() {}
 
 func (x *GetUserReply) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[8]
+	mi := &file_auth_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -938,7 +1072,7 @@ func (x *GetUserReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserReply.ProtoReflect.Descriptor instead.
 func (*GetUserReply) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{8}
+	return file_auth_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetUserReply) GetErrInfoReason() GetUserReply_ERR_INFO_REASON {
@@ -966,7 +1100,7 @@ type DeleteUsersReply struct {
 
 func (x *DeleteUsersReply) Reset() {
 	*x = DeleteUsersReply{}
-	mi := &file_auth_service_proto_msgTypes[9]
+	mi := &file_auth_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -978,7 +1112,7 @@ func (x *DeleteUsersReply) String() string {
 func (*DeleteUsersReply) ProtoMessage() {}
 
 func (x *DeleteUsersReply) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[9]
+	mi := &file_auth_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -991,7 +1125,7 @@ func (x *DeleteUsersReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUsersReply.ProtoReflect.Descriptor instead.
 func (*DeleteUsersReply) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{9}
+	return file_auth_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteUsersReply) GetErrInfoReason() DeleteUsersReply_ERR_INFO_REASON {
@@ -1017,14 +1151,14 @@ func (x *DeleteUsersReply) GetMessage() string {
 
 type UpdateUsersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UpdatedUser   *UpdateUser            `protobuf:"bytes,2,opt,name=updatedUser,proto3" json:"updatedUser,omitempty"`
+	UpdatedUser   *UpdateUser            `protobuf:"bytes,1,opt,name=updatedUser,proto3" json:"updatedUser,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateUsersRequest) Reset() {
 	*x = UpdateUsersRequest{}
-	mi := &file_auth_service_proto_msgTypes[10]
+	mi := &file_auth_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1036,7 +1170,7 @@ func (x *UpdateUsersRequest) String() string {
 func (*UpdateUsersRequest) ProtoMessage() {}
 
 func (x *UpdateUsersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[10]
+	mi := &file_auth_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1049,7 +1183,7 @@ func (x *UpdateUsersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUsersRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUsersRequest) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{10}
+	return file_auth_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpdateUsersRequest) GetUpdatedUser() *UpdateUser {
@@ -1061,16 +1195,16 @@ func (x *UpdateUsersRequest) GetUpdatedUser() *UpdateUser {
 
 type UpdateUser struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Mail          string                 `protobuf:"bytes,2,opt,name=mail,proto3" json:"mail,omitempty"`
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Age           uint32                 `protobuf:"varint,4,opt,name=age,proto3" json:"age,omitempty"`
+	Mail          string                 `protobuf:"bytes,1,opt,name=mail,proto3" json:"mail,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Age           uint32                 `protobuf:"varint,3,opt,name=age,proto3" json:"age,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateUser) Reset() {
 	*x = UpdateUser{}
-	mi := &file_auth_service_proto_msgTypes[11]
+	mi := &file_auth_service_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1082,7 +1216,7 @@ func (x *UpdateUser) String() string {
 func (*UpdateUser) ProtoMessage() {}
 
 func (x *UpdateUser) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[11]
+	mi := &file_auth_service_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1095,7 +1229,7 @@ func (x *UpdateUser) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUser.ProtoReflect.Descriptor instead.
 func (*UpdateUser) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{11}
+	return file_auth_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UpdateUser) GetMail() string {
@@ -1130,7 +1264,7 @@ type UpdateUsersReply struct {
 
 func (x *UpdateUsersReply) Reset() {
 	*x = UpdateUsersReply{}
-	mi := &file_auth_service_proto_msgTypes[12]
+	mi := &file_auth_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1142,7 +1276,7 @@ func (x *UpdateUsersReply) String() string {
 func (*UpdateUsersReply) ProtoMessage() {}
 
 func (x *UpdateUsersReply) ProtoReflect() protoreflect.Message {
-	mi := &file_auth_service_proto_msgTypes[12]
+	mi := &file_auth_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1155,7 +1289,7 @@ func (x *UpdateUsersReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUsersReply.ProtoReflect.Descriptor instead.
 func (*UpdateUsersReply) Descriptor() ([]byte, []int) {
-	return file_auth_service_proto_rawDescGZIP(), []int{12}
+	return file_auth_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UpdateUsersReply) GetErrInfoReason() UpdateUsersReply_ERR_INFO_REASON {
@@ -1183,7 +1317,27 @@ var File_auth_service_proto protoreflect.FileDescriptor
 
 const file_auth_service_proto_rawDesc = "" +
 	"\n" +
-	"\x12auth-service.proto\x12\fplatform.mvp\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"g\n" +
+	"\x12auth-service.proto\x12\fplatform.mvp\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"\xdf\x03\n" +
+	"\n" +
+	"CheckReply\x12P\n" +
+	"\x0ferr_info_reason\x18\x01 \x01(\x0e2(.platform.mvp.CheckReply.ERR_INFO_REASONR\rerrInfoReason\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"\xe4\x02\n" +
+	"\x0fERR_INFO_REASON\x12\x0f\n" +
+	"\vUNSPECIFIED\x10\x00\x12\x14\n" +
+	"\x10VALIDATION_ERROR\x10\x01\x12\x13\n" +
+	"\x0fINVALID_REQUEST\x10\x02\x12\r\n" +
+	"\tSTATUS_OK\x10\x03\x12\x18\n" +
+	"\x14ACCESS_TOKEN_EXPIRED\x10\x04\x12\x19\n" +
+	"\x15REFRESH_TOKEN_EXPIRED\x10\x05\x12\x1a\n" +
+	"\x16ACCESS_TOKEN_NOT_FOUND\x10\x06\x12\x1b\n" +
+	"\x17REFRESH_TOKEN_NOT_FOUND\x10\a\x12\x17\n" +
+	"\x13TOKEN_PAIR_MISMATCH\x10\b\x12\x18\n" +
+	"\x14ACCESS_TOKEN_REVOKED\x10\t\x12\x19\n" +
+	"\x15REFRESH_TOKEN_REVOKED\x10\n" +
+	"\x12\x18\n" +
+	"\x14INVALID_ACCESS_TOKEN\x10\v\x12\x19\n" +
+	"\x15INVALID_REFRESH_TOKEN\x10\f\x12\x15\n" +
+	"\x11SESSION_NOT_FOUND\x10\r\"g\n" +
 	"\x0fRegisterRequest\x12\x12\n" +
 	"\x04mail\x18\x01 \x01(\tR\x04mail\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x12\n" +
@@ -1259,12 +1413,12 @@ const file_auth_service_proto_rawDesc = "" +
 	"\x0fINVALID_REQUEST\x10\x02\x12\r\n" +
 	"\tSTATUS_OK\x10\x03\"P\n" +
 	"\x12UpdateUsersRequest\x12:\n" +
-	"\vupdatedUser\x18\x02 \x01(\v2\x18.platform.mvp.UpdateUserR\vupdatedUser\"F\n" +
+	"\vupdatedUser\x18\x01 \x01(\v2\x18.platform.mvp.UpdateUserR\vupdatedUser\"F\n" +
 	"\n" +
 	"UpdateUser\x12\x12\n" +
-	"\x04mail\x18\x02 \x01(\tR\x04mail\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\x12\x10\n" +
-	"\x03age\x18\x04 \x01(\rR\x03age\"\x8a\x02\n" +
+	"\x04mail\x18\x01 \x01(\tR\x04mail\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
+	"\x03age\x18\x03 \x01(\rR\x03age\"\x8a\x02\n" +
 	"\x10UpdateUsersReply\x12V\n" +
 	"\x0ferr_info_reason\x18\x01 \x01(\x0e2..platform.mvp.UpdateUsersReply.ERR_INFO_REASONR\rerrInfoReason\x12&\n" +
 	"\x04user\x18\x02 \x01(\v2\x12.platform.mvp.UserR\x04user\x12\x18\n" +
@@ -1273,13 +1427,13 @@ const file_auth_service_proto_rawDesc = "" +
 	"\vUNSPECIFIED\x10\x00\x12\x14\n" +
 	"\x10VALIDATION_ERROR\x10\x01\x12\x13\n" +
 	"\x0fINVALID_REQUEST\x10\x02\x12\r\n" +
-	"\tSTATUS_OK\x10\x032\x98\x02\n" +
-	"\vAuthService\x12H\n" +
+	"\tSTATUS_OK\x10\x032\xfc\x04\n" +
+	"\x0eAccountService\x12H\n" +
 	"\bRegister\x12\x1d.platform.mvp.RegisterRequest\x1a\x1b.platform.mvp.RegisterReply\"\x00\x12?\n" +
 	"\x05Login\x12\x1a.platform.mvp.LoginRequest\x1a\x18.platform.mvp.LoginReply\"\x00\x12=\n" +
 	"\x06Logout\x12\x16.google.protobuf.Empty\x1a\x19.platform.mvp.LogoutReply\"\x00\x12?\n" +
-	"\aRefresh\x12\x16.google.protobuf.Empty\x1a\x1a.platform.mvp.RefreshReply\"\x002\xb1\x02\n" +
-	"\vUserService\x12E\n" +
+	"\aRefresh\x12\x16.google.protobuf.Empty\x1a\x1a.platform.mvp.RefreshReply\"\x00\x12;\n" +
+	"\x05Check\x12\x16.google.protobuf.Empty\x1a\x18.platform.mvp.CheckReply\"\x00\x12E\n" +
 	"\fGetUsersList\x12\x16.google.protobuf.Empty\x1a\x1b.platform.mvp.GetUsersReply\"\x00\x12?\n" +
 	"\aGetUser\x12\x16.google.protobuf.Empty\x1a\x1a.platform.mvp.GetUserReply\"\x00\x12G\n" +
 	"\vDeleteUsers\x12\x16.google.protobuf.Empty\x1a\x1e.platform.mvp.DeleteUsersReply\"\x00\x12Q\n" +
@@ -1297,70 +1451,75 @@ func file_auth_service_proto_rawDescGZIP() []byte {
 	return file_auth_service_proto_rawDescData
 }
 
-var file_auth_service_proto_enumTypes = make([]protoimpl.EnumInfo, 8)
-var file_auth_service_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_auth_service_proto_enumTypes = make([]protoimpl.EnumInfo, 9)
+var file_auth_service_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_auth_service_proto_goTypes = []any{
-	(RegisterReply_ERR_INFO_REASON)(0),    // 0: platform.mvp.RegisterReply.ERR_INFO_REASON
-	(LoginReply_ERR_INFO_REASON)(0),       // 1: platform.mvp.LoginReply.ERR_INFO_REASON
-	(LogoutReply_ERR_INFO_REASON)(0),      // 2: platform.mvp.LogoutReply.ERR_INFO_REASON
-	(RefreshReply_ERR_INFO_REASON)(0),     // 3: platform.mvp.RefreshReply.ERR_INFO_REASON
-	(GetUsersReply_ERR_INFO_REASON)(0),    // 4: platform.mvp.GetUsersReply.ERR_INFO_REASON
-	(GetUserReply_ERR_INFO_REASON)(0),     // 5: platform.mvp.GetUserReply.ERR_INFO_REASON
-	(DeleteUsersReply_ERR_INFO_REASON)(0), // 6: platform.mvp.DeleteUsersReply.ERR_INFO_REASON
-	(UpdateUsersReply_ERR_INFO_REASON)(0), // 7: platform.mvp.UpdateUsersReply.ERR_INFO_REASON
-	(*RegisterRequest)(nil),               // 8: platform.mvp.RegisterRequest
-	(*RegisterReply)(nil),                 // 9: platform.mvp.RegisterReply
-	(*LoginRequest)(nil),                  // 10: platform.mvp.LoginRequest
-	(*LoginReply)(nil),                    // 11: platform.mvp.LoginReply
-	(*LogoutReply)(nil),                   // 12: platform.mvp.LogoutReply
-	(*RefreshReply)(nil),                  // 13: platform.mvp.RefreshReply
-	(*GetUsersReply)(nil),                 // 14: platform.mvp.GetUsersReply
-	(*User)(nil),                          // 15: platform.mvp.User
-	(*GetUserReply)(nil),                  // 16: platform.mvp.GetUserReply
-	(*DeleteUsersReply)(nil),              // 17: platform.mvp.DeleteUsersReply
-	(*UpdateUsersRequest)(nil),            // 18: platform.mvp.UpdateUsersRequest
-	(*UpdateUser)(nil),                    // 19: platform.mvp.UpdateUser
-	(*UpdateUsersReply)(nil),              // 20: platform.mvp.UpdateUsersReply
-	(*timestamppb.Timestamp)(nil),         // 21: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),                 // 22: google.protobuf.Empty
+	(CheckReply_ERR_INFO_REASON)(0),       // 0: platform.mvp.CheckReply.ERR_INFO_REASON
+	(RegisterReply_ERR_INFO_REASON)(0),    // 1: platform.mvp.RegisterReply.ERR_INFO_REASON
+	(LoginReply_ERR_INFO_REASON)(0),       // 2: platform.mvp.LoginReply.ERR_INFO_REASON
+	(LogoutReply_ERR_INFO_REASON)(0),      // 3: platform.mvp.LogoutReply.ERR_INFO_REASON
+	(RefreshReply_ERR_INFO_REASON)(0),     // 4: platform.mvp.RefreshReply.ERR_INFO_REASON
+	(GetUsersReply_ERR_INFO_REASON)(0),    // 5: platform.mvp.GetUsersReply.ERR_INFO_REASON
+	(GetUserReply_ERR_INFO_REASON)(0),     // 6: platform.mvp.GetUserReply.ERR_INFO_REASON
+	(DeleteUsersReply_ERR_INFO_REASON)(0), // 7: platform.mvp.DeleteUsersReply.ERR_INFO_REASON
+	(UpdateUsersReply_ERR_INFO_REASON)(0), // 8: platform.mvp.UpdateUsersReply.ERR_INFO_REASON
+	(*CheckReply)(nil),                    // 9: platform.mvp.CheckReply
+	(*RegisterRequest)(nil),               // 10: platform.mvp.RegisterRequest
+	(*RegisterReply)(nil),                 // 11: platform.mvp.RegisterReply
+	(*LoginRequest)(nil),                  // 12: platform.mvp.LoginRequest
+	(*LoginReply)(nil),                    // 13: platform.mvp.LoginReply
+	(*LogoutReply)(nil),                   // 14: platform.mvp.LogoutReply
+	(*RefreshReply)(nil),                  // 15: platform.mvp.RefreshReply
+	(*GetUsersReply)(nil),                 // 16: platform.mvp.GetUsersReply
+	(*User)(nil),                          // 17: platform.mvp.User
+	(*GetUserReply)(nil),                  // 18: platform.mvp.GetUserReply
+	(*DeleteUsersReply)(nil),              // 19: platform.mvp.DeleteUsersReply
+	(*UpdateUsersRequest)(nil),            // 20: platform.mvp.UpdateUsersRequest
+	(*UpdateUser)(nil),                    // 21: platform.mvp.UpdateUser
+	(*UpdateUsersReply)(nil),              // 22: platform.mvp.UpdateUsersReply
+	(*timestamppb.Timestamp)(nil),         // 23: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),                 // 24: google.protobuf.Empty
 }
 var file_auth_service_proto_depIdxs = []int32{
-	0,  // 0: platform.mvp.RegisterReply.err_info_reason:type_name -> platform.mvp.RegisterReply.ERR_INFO_REASON
-	1,  // 1: platform.mvp.LoginReply.err_info_reason:type_name -> platform.mvp.LoginReply.ERR_INFO_REASON
-	2,  // 2: platform.mvp.LogoutReply.err_info_reason:type_name -> platform.mvp.LogoutReply.ERR_INFO_REASON
-	3,  // 3: platform.mvp.RefreshReply.err_info_reason:type_name -> platform.mvp.RefreshReply.ERR_INFO_REASON
-	4,  // 4: platform.mvp.GetUsersReply.err_info_reason:type_name -> platform.mvp.GetUsersReply.ERR_INFO_REASON
-	15, // 5: platform.mvp.GetUsersReply.users:type_name -> platform.mvp.User
-	21, // 6: platform.mvp.User.created_at:type_name -> google.protobuf.Timestamp
-	21, // 7: platform.mvp.User.added_at:type_name -> google.protobuf.Timestamp
-	5,  // 8: platform.mvp.GetUserReply.err_info_reason:type_name -> platform.mvp.GetUserReply.ERR_INFO_REASON
-	15, // 9: platform.mvp.GetUserReply.user:type_name -> platform.mvp.User
-	6,  // 10: platform.mvp.DeleteUsersReply.err_info_reason:type_name -> platform.mvp.DeleteUsersReply.ERR_INFO_REASON
-	15, // 11: platform.mvp.DeleteUsersReply.user:type_name -> platform.mvp.User
-	19, // 12: platform.mvp.UpdateUsersRequest.updatedUser:type_name -> platform.mvp.UpdateUser
-	7,  // 13: platform.mvp.UpdateUsersReply.err_info_reason:type_name -> platform.mvp.UpdateUsersReply.ERR_INFO_REASON
-	15, // 14: platform.mvp.UpdateUsersReply.user:type_name -> platform.mvp.User
-	8,  // 15: platform.mvp.AuthService.Register:input_type -> platform.mvp.RegisterRequest
-	10, // 16: platform.mvp.AuthService.Login:input_type -> platform.mvp.LoginRequest
-	22, // 17: platform.mvp.AuthService.Logout:input_type -> google.protobuf.Empty
-	22, // 18: platform.mvp.AuthService.Refresh:input_type -> google.protobuf.Empty
-	22, // 19: platform.mvp.UserService.GetUsersList:input_type -> google.protobuf.Empty
-	22, // 20: platform.mvp.UserService.GetUser:input_type -> google.protobuf.Empty
-	22, // 21: platform.mvp.UserService.DeleteUsers:input_type -> google.protobuf.Empty
-	18, // 22: platform.mvp.UserService.UpdateUsers:input_type -> platform.mvp.UpdateUsersRequest
-	9,  // 23: platform.mvp.AuthService.Register:output_type -> platform.mvp.RegisterReply
-	11, // 24: platform.mvp.AuthService.Login:output_type -> platform.mvp.LoginReply
-	12, // 25: platform.mvp.AuthService.Logout:output_type -> platform.mvp.LogoutReply
-	13, // 26: platform.mvp.AuthService.Refresh:output_type -> platform.mvp.RefreshReply
-	14, // 27: platform.mvp.UserService.GetUsersList:output_type -> platform.mvp.GetUsersReply
-	16, // 28: platform.mvp.UserService.GetUser:output_type -> platform.mvp.GetUserReply
-	17, // 29: platform.mvp.UserService.DeleteUsers:output_type -> platform.mvp.DeleteUsersReply
-	20, // 30: platform.mvp.UserService.UpdateUsers:output_type -> platform.mvp.UpdateUsersReply
-	23, // [23:31] is the sub-list for method output_type
-	15, // [15:23] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	0,  // 0: platform.mvp.CheckReply.err_info_reason:type_name -> platform.mvp.CheckReply.ERR_INFO_REASON
+	1,  // 1: platform.mvp.RegisterReply.err_info_reason:type_name -> platform.mvp.RegisterReply.ERR_INFO_REASON
+	2,  // 2: platform.mvp.LoginReply.err_info_reason:type_name -> platform.mvp.LoginReply.ERR_INFO_REASON
+	3,  // 3: platform.mvp.LogoutReply.err_info_reason:type_name -> platform.mvp.LogoutReply.ERR_INFO_REASON
+	4,  // 4: platform.mvp.RefreshReply.err_info_reason:type_name -> platform.mvp.RefreshReply.ERR_INFO_REASON
+	5,  // 5: platform.mvp.GetUsersReply.err_info_reason:type_name -> platform.mvp.GetUsersReply.ERR_INFO_REASON
+	17, // 6: platform.mvp.GetUsersReply.users:type_name -> platform.mvp.User
+	23, // 7: platform.mvp.User.created_at:type_name -> google.protobuf.Timestamp
+	23, // 8: platform.mvp.User.added_at:type_name -> google.protobuf.Timestamp
+	6,  // 9: platform.mvp.GetUserReply.err_info_reason:type_name -> platform.mvp.GetUserReply.ERR_INFO_REASON
+	17, // 10: platform.mvp.GetUserReply.user:type_name -> platform.mvp.User
+	7,  // 11: platform.mvp.DeleteUsersReply.err_info_reason:type_name -> platform.mvp.DeleteUsersReply.ERR_INFO_REASON
+	17, // 12: platform.mvp.DeleteUsersReply.user:type_name -> platform.mvp.User
+	21, // 13: platform.mvp.UpdateUsersRequest.updatedUser:type_name -> platform.mvp.UpdateUser
+	8,  // 14: platform.mvp.UpdateUsersReply.err_info_reason:type_name -> platform.mvp.UpdateUsersReply.ERR_INFO_REASON
+	17, // 15: platform.mvp.UpdateUsersReply.user:type_name -> platform.mvp.User
+	10, // 16: platform.mvp.AccountService.Register:input_type -> platform.mvp.RegisterRequest
+	12, // 17: platform.mvp.AccountService.Login:input_type -> platform.mvp.LoginRequest
+	24, // 18: platform.mvp.AccountService.Logout:input_type -> google.protobuf.Empty
+	24, // 19: platform.mvp.AccountService.Refresh:input_type -> google.protobuf.Empty
+	24, // 20: platform.mvp.AccountService.Check:input_type -> google.protobuf.Empty
+	24, // 21: platform.mvp.AccountService.GetUsersList:input_type -> google.protobuf.Empty
+	24, // 22: platform.mvp.AccountService.GetUser:input_type -> google.protobuf.Empty
+	24, // 23: platform.mvp.AccountService.DeleteUsers:input_type -> google.protobuf.Empty
+	20, // 24: platform.mvp.AccountService.UpdateUsers:input_type -> platform.mvp.UpdateUsersRequest
+	11, // 25: platform.mvp.AccountService.Register:output_type -> platform.mvp.RegisterReply
+	13, // 26: platform.mvp.AccountService.Login:output_type -> platform.mvp.LoginReply
+	14, // 27: platform.mvp.AccountService.Logout:output_type -> platform.mvp.LogoutReply
+	15, // 28: platform.mvp.AccountService.Refresh:output_type -> platform.mvp.RefreshReply
+	9,  // 29: platform.mvp.AccountService.Check:output_type -> platform.mvp.CheckReply
+	16, // 30: platform.mvp.AccountService.GetUsersList:output_type -> platform.mvp.GetUsersReply
+	18, // 31: platform.mvp.AccountService.GetUser:output_type -> platform.mvp.GetUserReply
+	19, // 32: platform.mvp.AccountService.DeleteUsers:output_type -> platform.mvp.DeleteUsersReply
+	22, // 33: platform.mvp.AccountService.UpdateUsers:output_type -> platform.mvp.UpdateUsersReply
+	25, // [25:34] is the sub-list for method output_type
+	16, // [16:25] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_auth_service_proto_init() }
@@ -1373,10 +1532,10 @@ func file_auth_service_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_auth_service_proto_rawDesc), len(file_auth_service_proto_rawDesc)),
-			NumEnums:      8,
-			NumMessages:   13,
+			NumEnums:      9,
+			NumMessages:   14,
 			NumExtensions: 0,
-			NumServices:   2,
+			NumServices:   1,
 		},
 		GoTypes:           file_auth_service_proto_goTypes,
 		DependencyIndexes: file_auth_service_proto_depIdxs,

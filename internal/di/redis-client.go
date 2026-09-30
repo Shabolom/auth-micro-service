@@ -14,7 +14,7 @@ func (d *DI) NewRedisClient() *redis.Client {
 		Password: d.Config().Redis.RedisPassword,
 		DB:       0,
 
-		PoolSize:     4,
+		PoolSize:     10,
 		MinIdleConns: 2,
 
 		DialTimeout:  5 * time.Second,
@@ -23,6 +23,9 @@ func (d *DI) NewRedisClient() *redis.Client {
 
 		MaxRetries:  2,
 		PoolTimeout: 2 * time.Second,
+
+		ConnMaxIdleTime: 5 * time.Minute,
+		ConnMaxLifetime: time.Hour,
 	})
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
